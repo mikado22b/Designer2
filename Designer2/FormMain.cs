@@ -851,9 +851,6 @@ namespace Designer2
         //---
         protected void addInsertItem(int ind)
         {
-            Type a = typeof(int);
-            b = 8;
-
             Item ob = new Item();
             int sw = comboBoxItems.SelectedIndex;
 
