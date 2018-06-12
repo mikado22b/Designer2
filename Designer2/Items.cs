@@ -641,7 +641,7 @@ namespace Designer2
             up.BackgroundImage = tr;
             up.BackgroundImageLayout = ImageLayout.Zoom;
             up.Top = x.Top + x.Height + il / 2 - (int)(up.Height * 1.7);
-            up.Left = nudy.Left + nudy.Width + (int)(1.5 * up.Width);
+            up.Left = nudy.Left + nudy.Width + il * 2 + up.Width;
             up.Tag = eDirection.iDown;
             up.Click += new EventHandler(valueYchange);
 
@@ -1771,14 +1771,6 @@ namespace Designer2
         protected PictureBox pb;
         protected PictureBox pbc;
 
-        public static new Bitmap BMP
-        {
-            get
-            {
-                return Properties.Resources.Circle;
-            }
-        }
-
         //---
         public circle()
         {
@@ -1949,9 +1941,17 @@ namespace Designer2
             name.Width = nameWidth;
             tab.Add(name);
 
+            f = new CheckBox();
+            f.Top = name.Top + name.Height + il;
+            f.Left = il + labelWidth;
+            f.Text = "Fill";
+            f.Checked = fill;
+            f.CheckedChanged += new EventHandler(fillChange);
+            tab.Add(f);
+
             Label x = new Label();
             x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
+            x.Top = f.Top + f.Height + il * 6;
             x.Left = il;
             x.Width = labelWidth;
             tab.Add(x);
@@ -1965,7 +1965,7 @@ namespace Designer2
 
             Label ra = new Label();
             ra.Text = "R=";
-            ra.Top = y.Top + y.Height + il;
+            ra.Top = y.Top + y.Height + il * 6;
             ra.Left = il;
             ra.Width = x.Width;
             tab.Add(ra);
@@ -2000,25 +2000,17 @@ namespace Designer2
             nudr.ValueChanged += new EventHandler(valueRchange);
             tab.Add(nudr);
 
-            f = new CheckBox();
-            f.Top = nudx.Top;
-            f.Left = nudx.Left + nudx.Width + 5 * il;
-            f.Text = "Fill";
-            f.Checked = fill;
-            f.CheckedChanged += new EventHandler(fillChange);
-            tab.Add(f);
-
             Button up = new Button();
             up.Text = "";
-            up.Height = buttonSize;
+            up.Height = nudx.Height + 6;
             up.Width = up.Height;
 
             tr = Properties.Resources.blackArrowUp;
             tr.MakeTransparent(Color.White);
             up.BackgroundImage = tr;
             up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudr.Top + nudr.Height + 2 * il;
-            up.Left = nudr.Left + nudr.Width - up.Width;
+            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
+            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
             up.Tag = eDirection.iUp;
             up.Click += new EventHandler(valueYchange);
             tab.Add(up);
@@ -2089,8 +2081,8 @@ namespace Designer2
             tr.MakeTransparent(Color.White);
             shrink.BackgroundImage = tr;
             shrink.BackgroundImageLayout = ImageLayout.Zoom;
-            shrink.Top = down.Top + down.Height + 2 * il;
-            shrink.Left = left.Left;
+            shrink.Top = nudr.Top + nudr.Height / 2 - shrink.Height / 2;
+            shrink.Left = nudr.Left + nudr.Width + 2 * il;
             shrink.Tag = eDirection.iLeft;
             shrink.Click += new EventHandler(valueRchange);
             tab.Add(shrink);
@@ -2573,9 +2565,17 @@ namespace Designer2
             name.Width = nameWidth;
             tab.Add(name);
 
+            f = new CheckBox();
+            f.Top = name.Top + name.Height + il;
+            f.Left = il + labelWidth;
+            f.Text = "Fill";
+            f.Checked = fill;
+            f.CheckedChanged += new EventHandler(fillChange);
+            tab.Add(f);
+
             Label x = new Label();
             x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
+            x.Top = f.Top + f.Height + il * 6;
             x.Left = il;
             x.Width = labelWidth;
             tab.Add(x);
@@ -2589,7 +2589,7 @@ namespace Designer2
 
             Label lrx = new Label();
             lrx.Text = "Rx=";
-            lrx.Top = y.Top + y.Height + il;
+            lrx.Top = y.Top + y.Height + il * 6;
             lrx.Left = il;
             lrx.Width = x.Width;
             tab.Add(lrx);
@@ -2641,25 +2641,17 @@ namespace Designer2
             nudry.ValueChanged += new EventHandler(valueRychange);
             tab.Add(nudry);
 
-            f = new CheckBox();
-            f.Top = nudx.Top;
-            f.Left = nudx.Left + nudx.Width + 5 * il;
-            f.Text = "Fill";
-            f.Checked = fill;
-            f.CheckedChanged += new EventHandler(fillChange);
-            tab.Add(f);
-
             Button up = new Button();
             up.Text = "";
-            up.Height = (int)(0.73 * buttonSize);
+            up.Height = nudx.Height + 6;
             up.Width = up.Height;
 
             tr = Properties.Resources.blackArrowUp;
             tr.MakeTransparent(Color.White);
             up.BackgroundImage = tr;
             up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudry.Top + nudry.Height + 2 * il;
-            up.Left = nudry.Left + nudry.Width - up.Width;
+            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
+            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
             up.Tag = eDirection.iUp;
             up.Click += new EventHandler(valueYchange);
             tab.Add(up);
@@ -2730,8 +2722,8 @@ namespace Designer2
             tr.MakeTransparent(Color.White);
             shrinkx.BackgroundImage = tr;
             shrinkx.BackgroundImageLayout = ImageLayout.Zoom;
-            shrinkx.Top = down.Top + down.Height + 2 * il;
-            shrinkx.Left = left.Left;
+            shrinkx.Top = nudrx.Top + nudrx.Height / 2 - shrinkx.Height / 2;
+            shrinkx.Left = nudrx.Left + nudrx.Width + 2 * il;
             shrinkx.Tag = eDirection.iLeft;
             shrinkx.Click += new EventHandler(valueRxchange);
             tab.Add(shrinkx);
@@ -2774,8 +2766,8 @@ namespace Designer2
             tr.MakeTransparent(Color.White);
             shrinky.BackgroundImage = tr;
             shrinky.BackgroundImageLayout = ImageLayout.Zoom;
-            shrinky.Top = shrinkx.Top + shrinkx.Height + 2 * il;
-            shrinky.Left = left.Left;
+            shrinky.Top = nudry.Top + nudry.Height / 2 - shrinky.Height / 2;
+            shrinky.Left = nudry.Left + nudry.Width + 2 * il;
             shrinky.Tag = eDirection.iLeft;
             shrinky.Click += new EventHandler(valueRychange);
             tab.Add(shrinky);
@@ -3858,14 +3850,6 @@ namespace Designer2
         protected PictureBox pb;
         protected PictureBox pbc;
 
-        public static new Bitmap BMP
-        {
-            get
-            {
-                return Properties.Resources.Rectangle;
-            }
-        }
-
         //---
 
         public rectangle()
@@ -4013,9 +3997,17 @@ namespace Designer2
             name.Width = nameWidth;
             tab.Add(name);
 
+            f = new CheckBox();
+            f.Top = name.Top + name.Height + il;
+            f.Left = il + labelWidth;
+            f.Text = "Fill";
+            f.Checked = fill;
+            f.CheckedChanged += new EventHandler(fillChange);
+            tab.Add(f);
+
             Label x = new Label();
             x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
+            x.Top = f.Top + f.Height + il * 6;
             x.Left = il;
             x.Width = labelWidth;
             tab.Add(x);
@@ -4029,7 +4021,7 @@ namespace Designer2
 
             Label h = new Label();
             h.Text = "H=";
-            h.Top = y.Top + y.Height + 4 * il;
+            h.Top = y.Top + y.Height + il * 8;
             h.Left = il;
             h.Width = x.Width;
             tab.Add(h);
@@ -4081,25 +4073,17 @@ namespace Designer2
             nudw.ValueChanged += new EventHandler(valueWchange);
             tab.Add(nudw);
 
-            f = new CheckBox();
-            f.Top = nudx.Top;
-            f.Left = nudx.Left + nudx.Width + 5 * il;
-            f.Text = "Fill";
-            f.Checked = fill;
-            f.CheckedChanged += new EventHandler(fillChange);
-            tab.Add(f);
-
             Button up = new Button();
             up.Text = "";
-            up.Height = 25;
+            up.Height = nudx.Height + 6;
             up.Width = up.Height;
 
             tr = Properties.Resources.blackArrowUp;
             tr.MakeTransparent(Color.White);
             up.BackgroundImage = tr;
             up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudw.Top + nudw.Height + 4 * il;
-            up.Left = up.Width + il / 2;
+            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
+            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
             up.Tag = eDirection.iUp;
             up.Click += new EventHandler(valueYchange);
             tab.Add(up);
@@ -4170,8 +4154,8 @@ namespace Designer2
             tr.MakeTransparent(Color.White);
             shrh.BackgroundImage = tr;
             shrh.BackgroundImageLayout = ImageLayout.Zoom;
-            shrh.Top = up.Top;
-            shrh.Left = right.Left + 2 * right.Width + il;
+            shrh.Top = nudh.Top + nudh.Height + il / 2 - (int)(up.Height * 1.5);
+            shrh.Left = nudh.Left + nudh.Width + il * 2 + up.Width;
             shrh.Tag = eDirection.iUp;
             shrh.Click += new EventHandler(valueHchange);
             tab.Add(shrh);
@@ -4684,9 +4668,17 @@ namespace Designer2
             name.Width = nameWidth;
             tab.Add(name);
 
+            f = new CheckBox();
+            f.Top = name.Top + name.Height + il;
+            f.Left = il + labelWidth;
+            f.Text = "Fill";
+            f.Checked = fill;
+            f.CheckedChanged += new EventHandler(fillChange);
+            tab.Add(f);
+
             Label x = new Label();
             x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
+            x.Top = f.Top + f.Height + il * 6;
             x.Left = il;
             x.Width = labelWidth;
             tab.Add(x);
@@ -4700,7 +4692,7 @@ namespace Designer2
 
             Label h = new Label();
             h.Text = "H=";
-            h.Top = y.Top + y.Height + 4 * il;
+            h.Top = y.Top + y.Height + il * 8;
             h.Left = il;
             h.Width = x.Width;
             tab.Add(h);
@@ -4714,7 +4706,7 @@ namespace Designer2
 
             Label lr = new Label();
             lr.Text = "R=";
-            lr.Top = w.Top + w.Height + il;
+            lr.Top = w.Top + w.Height + il * 6;
             lr.Left = il;
             lr.Width = x.Width;
             tab.Add(lr);
@@ -4769,69 +4761,17 @@ namespace Designer2
             nur.ValueChanged += new EventHandler(valueRchange);
             tab.Add(nur);
 
-            f = new CheckBox();
-            f.Top = nudx.Top;
-            f.Left = nudx.Left + nudx.Width + 5 * il;
-            f.Text = "Fill";
-            f.Checked = fill;
-            f.CheckedChanged += new EventHandler(fillChange);
-            tab.Add(f);
-
-            Button shrink = new Button();
-            shrink.Text = "";
-            shrink.Height = nur.Height;
-            shrink.Width = shrink.Height;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrink.BackgroundImage = tr;
-            shrink.BackgroundImageLayout = ImageLayout.Zoom;
-            shrink.Top = nur.Top;
-            shrink.Left = nur.Left + nur.Width + il;
-            shrink.Tag = eDirection.iLeft;
-            shrink.Click += new EventHandler(valueRchange);
-            tab.Add(shrink);
-
-            Button increase = new Button();
-            increase.Text = shrink.Text;
-            increase.Height = shrink.Height;
-            increase.Width = shrink.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increase.BackgroundImage = tr;
-            increase.BackgroundImageLayout = ImageLayout.Zoom;
-            increase.Top = shrink.Top;
-            increase.Left = shrink.Left + 2 * shrink.Width;
-            increase.Tag = eDirection.iRight;
-            increase.Click += new EventHandler(valueRchange);
-            tab.Add(increase);
-
-            PictureBox pbr = new PictureBox();
-
-            pbr.Height = shrink.Height;
-            pbr.Width = shrink.Width;
-            pbr.Top = shrink.Top;
-            pbr.Left = shrink.Left + shrink.Width;
-
-            tr = Properties.Resources.Arc;
-            tr.MakeTransparent(Color.White);
-
-            pbr.Image = tr;
-            pbr.SizeMode = PictureBoxSizeMode.Zoom;
-            tab.Add(pbr);
-
             Button up = new Button();
             up.Text = "";
-            up.Height = 25;
+            up.Height = nudx.Height + 6;
             up.Width = up.Height;
 
             tr = Properties.Resources.blackArrowUp;
             tr.MakeTransparent(Color.White);
             up.BackgroundImage = tr;
             up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nur.Top + nur.Height + 4 * il;
-            up.Left = up.Width + il / 2;
+            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
+            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
             up.Tag = eDirection.iUp;
             up.Click += new EventHandler(valueYchange);
             tab.Add(up);
@@ -4902,8 +4842,8 @@ namespace Designer2
             tr.MakeTransparent(Color.White);
             shrh.BackgroundImage = tr;
             shrh.BackgroundImageLayout = ImageLayout.Zoom;
-            shrh.Top = up.Top;
-            shrh.Left = right.Left + 2 * right.Width + il;
+            shrh.Top = nudh.Top + nudh.Height + il / 2 - (int)(up.Height * 1.5);
+            shrh.Left = nudh.Left + nudh.Width + il * 2 + up.Width;
             shrh.Tag = eDirection.iUp;
             shrh.Click += new EventHandler(valueHchange);
             tab.Add(shrh);
@@ -4963,6 +4903,50 @@ namespace Designer2
             pbc2.Top = shrr.Top;
             pbc2.Left = shrh.Left;
             tab.Add(pbc2);
+
+            Button shrink = new Button();
+            shrink.Text = "";
+            shrink.Height = up.Height;
+            shrink.Width = up.Width;
+
+            tr = Properties.Resources.Shrink;
+            tr.MakeTransparent(Color.White);
+            shrink.BackgroundImage = tr;
+            shrink.BackgroundImageLayout = ImageLayout.Zoom;
+            shrink.Top = nur.Top + nur.Height / 2 - shrink.Height / 2;
+            shrink.Left = nur.Left + nur.Width + 2 * il;
+            shrink.Tag = eDirection.iLeft;
+            shrink.Click += new EventHandler(valueRchange);
+            tab.Add(shrink);
+
+            Button increase = new Button();
+            increase.Text = shrink.Text;
+            increase.Height = shrink.Height;
+            increase.Width = shrink.Width;
+
+            tr = Properties.Resources.Increase;
+            tr.MakeTransparent(Color.White);
+            increase.BackgroundImage = tr;
+            increase.BackgroundImageLayout = ImageLayout.Zoom;
+            increase.Top = shrink.Top;
+            increase.Left = shrink.Left + 2 * shrink.Width;
+            increase.Tag = eDirection.iRight;
+            increase.Click += new EventHandler(valueRchange);
+            tab.Add(increase);
+
+            PictureBox pbr = new PictureBox();
+
+            pbr.Height = shrink.Height;
+            pbr.Width = shrink.Width;
+            pbr.Top = shrink.Top;
+            pbr.Left = shrink.Left + shrink.Width;
+
+            tr = Properties.Resources.Arc;
+            tr.MakeTransparent(Color.White);
+
+            pbr.Image = tr;
+            pbr.SizeMode = PictureBoxSizeMode.Zoom;
+            tab.Add(pbr);
 
             return tab;
         }
@@ -5482,9 +5466,17 @@ namespace Designer2
             name.Width = nameWidth;
             tab.Add(name);
 
+            f = new CheckBox();
+            f.Top = name.Top + name.Height + il;
+            f.Left = il + labelWidth;
+            f.Text = "Fill";
+            f.Checked = fill;
+            f.CheckedChanged += new EventHandler(fillChange);
+            tab.Add(f);
+
             Label x = new Label();
             x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
+            x.Top = f.Top + f.Height + il * 6;
             x.Left = il;
             x.Width = labelWidth;
             tab.Add(x);
@@ -5498,7 +5490,7 @@ namespace Designer2
 
             Label ra = new Label();
             ra.Text = "R=";
-            ra.Top = y.Top + y.Height + il;
+            ra.Top = y.Top + y.Height + il * 5;
             ra.Left = il;
             ra.Width = x.Width;
             tab.Add(ra);
@@ -5567,25 +5559,17 @@ namespace Designer2
             nudang.ValueChanged += new EventHandler(valueAngChange);
             tab.Add(nudang);
 
-            f = new CheckBox();
-            f.Top = nudx.Top;
-            f.Left = nudx.Left + nudx.Width + 5 * il;
-            f.Text = "Fill";
-            f.Checked = fill;
-            f.CheckedChanged += new EventHandler(fillChange);
-            tab.Add(f);
-
             Button up = new Button();
             up.Text = "";
-            up.Height = buttonSize;
+            up.Height = nudx.Height + 6;
             up.Width = up.Height;
 
             tr = Properties.Resources.blackArrowUp;
             tr.MakeTransparent(Color.White);
             up.BackgroundImage = tr;
             up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudang.Top + nudang.Height + 2 * il;
-            up.Left = nudang.Left + nudang.Width - up.Width;
+            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
+            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
             up.Tag = eDirection.iUp;
             up.Click += new EventHandler(valueYchange);
             tab.Add(up);
