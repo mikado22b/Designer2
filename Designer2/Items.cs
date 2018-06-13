@@ -430,6 +430,19 @@ namespace Designer2
         }
 
         //---
+        protected void loadInit(ref PictureBox pb, Bitmap bmp, ref Label name, string n)
+        {
+            pb.Height = picHeight;
+            pb.Width = picWidth;
+            bmp.MakeTransparent(Color.White);
+            pb.Image = bmp;
+            pb.SizeMode = PictureBoxSizeMode.Zoom;
+            name.Text = n;
+            name.Left = pb.Width;
+            name.Width = nameWidth;
+        }
+
+        //---
         public virtual void move(Object sender, EventArgs e)
         { }
 
@@ -578,21 +591,11 @@ namespace Designer2
             List<Control> tab = new List<Control>();
 
             PictureBox pb = new PictureBox();
-
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
-            Bitmap tr = Properties.Resources.Point;
-            tr.MakeTransparent(Color.White);
-
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
-            tab.Add(pb);
-
             Label name = new Label();
-            name.Text = "Point" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
+            Bitmap tr = Properties.Resources.Point;
+            loadInit(ref pb, tr, ref name, "Point" + getName());
+
+            tab.Add(pb);
             tab.Add(name);
 
             Label x = new Label();
@@ -1037,23 +1040,13 @@ namespace Designer2
             List<Control> tab = new List<Control>();
 
             pb = new PictureBox();
-
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
+            Label name = new Label();
             Bitmap tr;
             if (closeLine) tr = Properties.Resources.mLineClosed;
             else tr = Properties.Resources.mLine;
-            tr.MakeTransparent(Color.White);
+            loadInit(ref pb, tr, ref name, "mLine" + getName());
 
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
             tab.Add(pb);
-
-            Label name = new Label();
-            name.Text = "mLine" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
             tab.Add(name);
 
             Label x = new Label();
@@ -1920,25 +1913,15 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-            Bitmap tr;
 
             pb = new PictureBox();
-
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
+            Label name = new Label();
+            Bitmap tr;
             if (fill) tr = Properties.Resources.CircleFill;
             else tr = Properties.Resources.Circle;
-            tr.MakeTransparent(Color.White);
+            loadInit(ref pb, tr, ref name, "Circle" + getName());
 
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
             tab.Add(pb);
-
-            Label name = new Label();
-            name.Text = "Circle" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
             tab.Add(name);
 
             f = new CheckBox();
@@ -2544,25 +2527,15 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-            Bitmap tr;
 
             pb = new PictureBox();
-
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
+            Label name = new Label();
+            Bitmap tr;
             if (fill) tr = Properties.Resources.EllipseFill;
             else tr = Properties.Resources.Ellipse;
-            tr.MakeTransparent(Color.White);
+            loadInit(ref pb, tr, ref name, "Ellipse" + getName());
 
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
             tab.Add(pb);
-
-            Label name = new Label();
-            name.Text = "Ellipse" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
             tab.Add(name);
 
             f = new CheckBox();
@@ -3185,7 +3158,6 @@ namespace Designer2
 
         //---
 
-        //---
         public override eColor draw(ref Basis canva, eColor cl, int tag)
         {
             if (fill)
@@ -3216,24 +3188,14 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-            Bitmap tr;
-
             pb = new PictureBox();
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
+            Label name = new Label();
+            Bitmap tr;
             if (fill) tr = Properties.Resources.TriangleFill;
             else tr = Properties.Resources.Triangle;
-            tr.MakeTransparent(Color.White);
+            loadInit(ref pb, tr, ref name, "Triangle" + getName());
 
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
             tab.Add(pb);
-
-            Label name = new Label();
-            name.Text = "Triangle" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
             tab.Add(name);
 
             Label x = new Label();
@@ -3977,24 +3939,14 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-
             pb = new PictureBox();
+            Label name = new Label();
             Bitmap tr;
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
             if (fill) tr = Properties.Resources.RectangleFill;
             else tr = Properties.Resources.Rectangle;
-            tr.MakeTransparent(Color.White);
+            loadInit(ref pb, tr, ref name, "Rectangle" + getName());
 
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
             tab.Add(pb);
-
-            Label name = new Label();
-            name.Text = "Rectangle" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
             tab.Add(name);
 
             f = new CheckBox();
@@ -4648,24 +4600,14 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-
             pb = new PictureBox();
+            Label name = new Label();
             Bitmap tr;
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
             if (fill) tr = Properties.Resources.roundRectFill;
             else tr = Properties.Resources.roundRect;
-            tr.MakeTransparent(Color.White);
+            loadInit(ref pb, tr, ref name, "RoundRect" + getName());
 
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
             tab.Add(pb);
-
-            Label name = new Label();
-            name.Text = "RoundRect" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
             tab.Add(name);
 
             f = new CheckBox();
@@ -5445,25 +5387,14 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-            Bitmap tr;
-
             pb = new PictureBox();
-
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
+            Label name = new Label();
+            Bitmap tr;
             if (fill) tr = Properties.Resources.PolygonFill;
             else tr = Properties.Resources.Polygon;
-            tr.MakeTransparent(Color.White);
+            loadInit(ref pb, tr, ref name, "Polygon" + getName());
 
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
             tab.Add(pb);
-
-            Label name = new Label();
-            name.Text = "Polygon" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
             tab.Add(name);
 
             f = new CheckBox();
@@ -6086,14 +6017,6 @@ namespace Designer2
         protected PictureBox pbc;
         protected ComboBox cb;
 
-        public static new Bitmap BMP
-        {
-            get
-            {
-                return Properties.Resources.Arc;
-            }
-        }
-
         //---
         public arc()
         {
@@ -6363,24 +6286,12 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-            Bitmap tr = null;
-
             pb = new PictureBox();
-
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
-            tr = arcBitmap();
-            tr.MakeTransparent(Color.White);
-
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
-            tab.Add(pb);
-
             Label name = new Label();
-            name.Text = "Arc" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
+            Bitmap tr = arcBitmap();
+            loadInit(ref pb, tr, ref name, "Arc" + getName());
+
+            tab.Add(pb);
             tab.Add(name);
 
             Label x = new Label();
@@ -7179,14 +7090,6 @@ namespace Designer2
         protected ComboBox cbdef;
         protected Panel p2;
 
-        public static new Bitmap BMP
-        {
-            get
-            {
-                return Properties.Resources.Color;
-            }
-        }
-
         //---
         public color()
         {
@@ -7273,24 +7176,13 @@ namespace Designer2
         public override List<Control> loadItem()
         {
             List<Control> tab = new List<Control>();
-            Bitmap tr;
 
             PictureBox pb = new PictureBox();
-
-            pb.Height = picHeight;
-            pb.Width = picWidth;
-
-            tr = Properties.Resources.Color;
-            tr.MakeTransparent(Color.White);
-
-            pb.Image = tr;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
-            tab.Add(pb);
-
             Label name = new Label();
-            name.Text = "Color" + getName();
-            name.Left = pb.Width;
-            name.Width = nameWidth;
+            Bitmap tr = Properties.Resources.Color;
+            loadInit(ref pb, tr, ref name, "Color" + getName());
+
+            tab.Add(pb);
             tab.Add(name);
 
             Label a = new Label();
