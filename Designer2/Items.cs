@@ -443,6 +443,112 @@ namespace Designer2
         }
 
         //---
+        protected void loadCross(int x, int y, int size, ref Button up, ref Button right,
+            ref Button down, ref Button left, ref PictureBox pbc, Bitmap center)
+        {
+            up.Text = "";
+            up.Height = size;
+            up.Width = up.Height;
+
+            Bitmap tr = Properties.Resources.blackArrowUp;
+            tr.MakeTransparent(Color.White);
+            up.BackgroundImage = tr;
+            up.BackgroundImageLayout = ImageLayout.Zoom;
+            up.Top = y;
+            up.Left = x;
+            up.Tag = eDirection.iUp;
+            //up.Click += new EventHandler(valueYchange);
+
+            right.Text = up.Text;
+            right.Height = up.Height;
+            right.Width = up.Width;
+
+            tr = Properties.Resources.blackArrowRight;
+            tr.MakeTransparent(Color.White);
+            right.BackgroundImage = tr;
+            right.BackgroundImageLayout = ImageLayout.Zoom;
+            right.Top = up.Top + up.Height;
+            right.Left = up.Left + up.Width;
+            right.Tag = eDirection.iRight;
+            // right.Click += new EventHandler(valueXchange);
+
+            down.Text = up.Text;
+            down.Height = up.Height;
+            down.Width = up.Width;
+
+            tr = Properties.Resources.blackArrowDown;
+            tr.MakeTransparent(Color.White);
+            down.BackgroundImage = tr;
+            down.BackgroundImageLayout = ImageLayout.Zoom;
+            down.Top = right.Top + up.Height;
+            down.Left = up.Left;
+            down.Tag = eDirection.iDown;
+            // down.Click += new EventHandler(valueYchange);
+
+            left.Text = up.Text;
+            left.Height = up.Height;
+            left.Width = up.Width;
+
+            tr = Properties.Resources.blackArrowLeft;
+            tr.MakeTransparent(Color.White);
+            left.BackgroundImage = tr;
+            left.BackgroundImageLayout = ImageLayout.Zoom;
+            left.Top = right.Top;
+            left.Left = up.Left - up.Width;
+            left.Tag = eDirection.iLeft;
+            // left.Click += new EventHandler(valueXchange);
+
+            pbc.Height = up.Height;
+            pbc.Width = up.Width;
+
+            center.MakeTransparent(Color.White);
+            pbc.Image = center;
+            pbc.SizeMode = PictureBoxSizeMode.Zoom;
+            pbc.Top = right.Top;
+            pbc.Left = up.Left;
+        }
+
+        //---
+        protected void loadXYcross(int x, int y, ref Label lx, ref Label ly,
+            ref NumericUpDown nudx, ref NumericUpDown nudy, ref Button up, ref Button right,
+            ref Button down, ref Button left, ref PictureBox pbc, Bitmap center)
+        {
+            lx.Text = "X=";
+            lx.Top = x;
+            lx.Left = y;
+            lx.Width = labelWidth;
+
+            ly.Text = "Y=";
+            ly.Top = lx.Top + lx.Height + il;
+            ly.Left = il;
+            ly.Width = lx.Width;
+
+            nudx.Top = lx.Top - 3;
+            nudx.Left = lx.Width + il;
+            nudx.Width = nudWidth;
+            nudx.Minimum = MIN;
+            nudx.Maximum = MAX;
+            //nudx.Value = p.X;
+            //nudx.ValueChanged += new EventHandler(valueXchange);
+
+            nudy.Top = ly.Top - 3;
+            nudy.Left = ly.Width + il;
+            nudy.Width = nudx.Width;
+            nudy.Minimum = nudx.Minimum;
+            nudy.Maximum = nudx.Maximum;
+            // nudy.Value = p.Y;
+            //nudy.ValueChanged += new EventHandler(valueYchange);
+
+            int size = nudx.Height + 8;
+
+            y = lx.Top + lx.Height + il / 2 - (int)(size * 1.7);
+            x = nudy.Left + nudy.Width + il * 3 + size;
+
+            loadCross(x, y, size, ref up, ref right, ref down,
+                ref left, ref pbc, center);
+        }
+
+        //---
         public virtual void move(Object sender, EventArgs e)
         { }
 
@@ -592,121 +698,43 @@ namespace Designer2
 
             PictureBox pb = new PictureBox();
             Label name = new Label();
-            Bitmap tr = Properties.Resources.Point;
-            loadInit(ref pb, tr, ref name, "Point" + getName());
+
+            loadInit(ref pb, Properties.Resources.Point, ref name, "Point" + getName());
+
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
+            Button up = new Button();
+            Button right = new Button();
+            Button down = new Button();
+            Button left = new Button();
+            PictureBox pbc = new PictureBox();
+
+            loadXYcross(name.Top + name.Height * 3 + il, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc,
+            Properties.Resources.Point);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = p.X;
+            nudy.Value = p.Y;
 
             tab.Add(pb);
             tab.Add(name);
-
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = name.Top + name.Height * 3 + il;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
-
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = il;
-            y.Width = x.Width;
-            tab.Add(y);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = p.X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-
+            tab.Add(lx);
+            tab.Add(ly);
             tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = y.Width + il;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = p.Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-
             tab.Add(nudy);
-
-            Button up = new Button();
-            up.Text = "";
-            up.Height = nudx.Height + 6;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = x.Top + x.Height + il / 2 - (int)(up.Height * 1.7);
-            up.Left = nudy.Left + nudy.Width + il * 2 + up.Width;
-            up.Tag = eDirection.iDown;
-            up.Click += new EventHandler(valueYchange);
-
             tab.Add(up);
-
-            Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-
             tab.Add(right);
-
-            Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iUp;
-            down.Click += new EventHandler(valueYchange);
-
             tab.Add(down);
-
-            Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-
             tab.Add(left);
-
-            PictureBox pbc = new PictureBox();
-            pbc.Height = up.Height;
-            pbc.Width = up.Width;
-            tr = Properties.Resources.Point;
-            tr.MakeTransparent(Color.White);
-            pbc.Image = tr;
-            pbc.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc.Top = right.Top;
-            pbc.Left = up.Left;
             tab.Add(pbc);
 
             return tab;
@@ -759,7 +787,7 @@ namespace Designer2
             }
             else if (sender.GetType() == typeof(Button))
             {
-                if ((eDirection)((sender as Button).Tag) == eDirection.iDown)
+                if ((eDirection)((sender as Button).Tag) == eDirection.iUp)
                 {
                     if (p.Y == MIN)
                     {
@@ -1046,202 +1074,84 @@ namespace Designer2
             else tr = Properties.Resources.mLine;
             loadInit(ref pb, tr, ref name, "mLine" + getName());
 
-            tab.Add(pb);
-            tab.Add(name);
-
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
-            x.Left = il;
-            x.Width = labelWidth - 3 * il;
-            tab.Add(x);
-
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = x.Left;
-            y.Width = x.Width;
-            tab.Add(y);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Left + x.Width + il;
-            nudx.Width = nudWidth - il * 2;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = this.lPt[selectedPoint].X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = nudx.Left;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = this.lPt[selectedPoint].Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
-
-            Button up = new Button();
-            up.Text = "";
-            up.Height = 25;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudx.Top;
-            up.Left = nudx.Left + nudx.Width + up.Width + il;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
-            Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
-            Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
-            Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-            tab.Add(left);
-
-            PictureBox center = new PictureBox();
-            center.Text = up.Text;
-            center.Height = up.Height;
-            center.Width = up.Width;
-            tr = Properties.Resources.Point;
-            tr.MakeTransparent(Color.White);
-            center.Image = tr;
-            center.SizeMode = PictureBoxSizeMode.Zoom;
-            center.Top = right.Top;
-            center.Left = up.Left;
-            tab.Add(center);
-
-            Button upMl = new Button();
-            upMl.Text = "";
-            upMl.Height = 25;
-            upMl.Width = upMl.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            upMl.BackgroundImage = tr;
-            upMl.BackgroundImageLayout = ImageLayout.Zoom;
-            upMl.Top = down.Top + down.Height + il; ;
-            upMl.Left = up.Left;
-            upMl.Tag = eDirection.iUp;
-            upMl.Click += new EventHandler(move);
-            tab.Add(upMl);
-
-            Button rightMl = new Button();
-            rightMl.Text = upMl.Text;
-            rightMl.Height = upMl.Height;
-            rightMl.Width = upMl.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            rightMl.BackgroundImage = tr;
-            rightMl.BackgroundImageLayout = ImageLayout.Zoom;
-            rightMl.Top = upMl.Top + upMl.Height;
-            rightMl.Left = upMl.Left + upMl.Width;
-            rightMl.Tag = eDirection.iRight;
-            rightMl.Click += new EventHandler(move);
-            tab.Add(rightMl);
-
-            Button downMl = new Button();
-            downMl.Text = upMl.Text;
-            downMl.Height = upMl.Height;
-            downMl.Width = upMl.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            downMl.BackgroundImage = tr;
-            downMl.BackgroundImageLayout = ImageLayout.Zoom;
-            downMl.Top = rightMl.Top + upMl.Height;
-            downMl.Left = upMl.Left;
-            downMl.Tag = eDirection.iDown;
-            downMl.Click += new EventHandler(move);
-            tab.Add(downMl);
-
-            Button leftMl = new Button();
-            leftMl.Text = upMl.Text;
-            leftMl.Height = upMl.Height;
-            leftMl.Width = upMl.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            leftMl.BackgroundImage = tr;
-            leftMl.BackgroundImageLayout = ImageLayout.Zoom;
-            leftMl.Top = rightMl.Top;
-            leftMl.Left = upMl.Left - upMl.Width;
-            leftMl.Tag = eDirection.iLeft;
-            leftMl.Click += new EventHandler(move);
-            tab.Add(leftMl);
-
-            centerMl = new PictureBox();
-            centerMl.Text = upMl.Text;
-            centerMl.Height = upMl.Height;
-            centerMl.Width = upMl.Width;
-            if (closeLine) tr = Properties.Resources.mLineClosed;
-            else tr = Properties.Resources.mLine;
-            tr.MakeTransparent(Color.White);
-            centerMl.Image = tr;
-            centerMl.SizeMode = PictureBoxSizeMode.Zoom;
-            centerMl.Top = rightMl.Top;
-            centerMl.Left = upMl.Left;
-            tab.Add(centerMl);
-
             CheckBox cb = new CheckBox();
-            cb.Top = y.Top + y.Height + il;
-            cb.Left = x.Left;
+            cb.Top = name.Top + name.Height + il;
+            cb.Left = il + labelWidth;
             cb.Width = 70;
             cb.Text = "Closed";
             cb.Checked = closeLine;
             cb.CheckedChanged += new EventHandler(closedChange);
             tab.Add(cb);
 
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
+            Button up = new Button();
+            Button right = new Button();
+            Button down = new Button();
+            Button left = new Button();
+            PictureBox pbc = new PictureBox();
+
+            loadXYcross(cb.Top + cb.Height + il * 2, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, Properties.Resources.Point);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = this.lPt[selectedPoint].X;
+            nudy.Value = this.lPt[selectedPoint].Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
+            tab.Add(left);
+            tab.Add(pbc);
+
+            Button upMl = new Button();
+            Button rightMl = new Button();
+            Button downMl = new Button();
+            Button leftMl = new Button();
+            centerMl = new PictureBox();
+
+            if (closeLine) tr = Properties.Resources.mLineClosed;
+            else tr = Properties.Resources.mLine;
+
+            loadCross(down.Left, down.Top + down.Height + il, up.Height, ref upMl,
+                             ref rightMl, ref downMl, ref leftMl, ref centerMl, tr);
+
+            upMl.Click += new EventHandler(move);
+            downMl.Click += new EventHandler(move);
+            rightMl.Click += new EventHandler(move);
+            leftMl.Click += new EventHandler(move);
+
+            tab.Add(upMl);
+            tab.Add(rightMl);
+            tab.Add(downMl);
+            tab.Add(leftMl);
+            tab.Add(centerMl);
+
+            Label lp = new Label();
+            lp.Text = "Points :";
+            lp.Top = ly.Top + ly.Height + il / 2;
+            lp.Left = ly.Left;
+            tab.Add(lp);
+
             lbml = new ListBox();
             lbml.Name = "lbMl";
-            lbml.Top = cb.Top + cb.Height + il;
+            lbml.Top = lp.Top + lp.Height;
             lbml.Left = il;
-            lbml.Width = 70;
+            lbml.Width = nudy.Left + nudy.Width - il;
             lbml.Height = 190;
 
             refreshList();
@@ -1251,25 +1161,25 @@ namespace Designer2
 
             Button ba = new Button();
             ba.Text = "&Add";
-            ba.Top = downMl.Top + downMl.Height + il * 3;
-            ba.Left = lbml.Left + lbml.Width + il;
-            ba.Width = 70;
+            ba.Top = downMl.Top + downMl.Height + il * 2;
+            ba.Left = left.Left;
+            ba.Width = up.Width * 3 / 2;
             ba.Click += new EventHandler(add);
             tab.Add(ba);
 
             Button bi = new Button();
             bi.Text = "&Insert";
-            bi.Top = ba.Top + ba.Height + il;
-            bi.Left = ba.Left;
+            bi.Top = ba.Top;
+            bi.Left = ba.Left + ba.Width;
             bi.Width = ba.Width;
             bi.Click += new EventHandler(ins);
             tab.Add(bi);
 
             bd = new Button();
             bd.Text = "&Del";
-            bd.Top = bi.Top + bi.Height + il;
+            bd.Top = ba.Top + ba.Height + il;
             bd.Left = ba.Left;
-            bd.Width = ba.Width;
+            bd.Width = up.Width * 3;
             if (this.lPt.Count < 3) bd.Enabled = false;
             else bd.Enabled = true;
             bd.Click += new EventHandler(del);
@@ -1921,9 +1831,6 @@ namespace Designer2
             else tr = Properties.Resources.Circle;
             loadInit(ref pb, tr, ref name, "Circle" + getName());
 
-            tab.Add(pb);
-            tab.Add(name);
-
             f = new CheckBox();
             f.Top = name.Top + name.Height + il;
             f.Left = il + labelWidth;
@@ -1932,46 +1839,49 @@ namespace Designer2
             f.CheckedChanged += new EventHandler(fillChange);
             tab.Add(f);
 
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = f.Top + f.Height + il * 6;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
+            Button up = new Button();
+            Button right = new Button();
+            Button down = new Button();
+            Button left = new Button();
+            pbc = new PictureBox();
+            if (fill) tr = Properties.Resources.CircleFill;
+            else tr = Properties.Resources.Circle;
 
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = il;
-            y.Width = x.Width;
-            tab.Add(y);
+            loadXYcross(f.Top + f.Height + il * 6, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, tr);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = c.X;
+            nudy.Value = c.Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
+            tab.Add(left);
+            tab.Add(pbc);
 
             Label ra = new Label();
             ra.Text = "R=";
-            ra.Top = y.Top + y.Height + il * 6;
+            ra.Top = ly.Top + ly.Height + il * 6;
             ra.Left = il;
-            ra.Width = x.Width;
+            ra.Width = lx.Width;
             tab.Add(ra);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = c.X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = y.Width + il;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = c.Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
 
             nudr = new NumericUpDown();
             nudr.Top = ra.Top - 3;
@@ -1982,78 +1892,6 @@ namespace Designer2
             nudr.Value = r;
             nudr.ValueChanged += new EventHandler(valueRchange);
             tab.Add(nudr);
-
-            Button up = new Button();
-            up.Text = "";
-            up.Height = nudx.Height + 6;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
-            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
-            Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
-            Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
-            Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-            tab.Add(left);
-
-            pbc = new PictureBox();
-            pbc.Height = up.Height;
-            pbc.Width = up.Width;
-            if (fill) tr = Properties.Resources.CircleFill;
-            else tr = Properties.Resources.Circle;
-            tr.MakeTransparent(Color.White);
-            pbc.Image = tr;
-            pbc.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc.Top = right.Top;
-            pbc.Left = up.Left;
-            tab.Add(pbc);
 
             Button shrink = new Button();
             shrink.Text = up.Text;
@@ -2535,9 +2373,6 @@ namespace Designer2
             else tr = Properties.Resources.Ellipse;
             loadInit(ref pb, tr, ref name, "Ellipse" + getName());
 
-            tab.Add(pb);
-            tab.Add(name);
-
             f = new CheckBox();
             f.Top = name.Top + name.Height + il;
             f.Left = il + labelWidth;
@@ -2546,53 +2381,56 @@ namespace Designer2
             f.CheckedChanged += new EventHandler(fillChange);
             tab.Add(f);
 
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = f.Top + f.Height + il * 6;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
+            Button up = new Button();
+            Button right = new Button();
+            Button down = new Button();
+            Button left = new Button();
+            pbc = new PictureBox();
+            if (fill) tr = Properties.Resources.EllipseFill;
+            else tr = Properties.Resources.Ellipse;
 
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = il;
-            y.Width = x.Width;
-            tab.Add(y);
+            loadXYcross(f.Top + f.Height + il * 6, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, tr);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = c.X;
+            nudy.Value = c.Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
+            tab.Add(left);
+            tab.Add(pbc);
 
             Label lrx = new Label();
             lrx.Text = "Rx=";
-            lrx.Top = y.Top + y.Height + il * 6;
+            lrx.Top = ly.Top + ly.Height + il * 6;
             lrx.Left = il;
-            lrx.Width = x.Width;
+            lrx.Width = lx.Width;
             tab.Add(lrx);
 
             Label lry = new Label();
             lry.Text = "Ry=";
             lry.Top = lrx.Top + lrx.Height + il;
             lry.Left = il;
-            lry.Width = x.Width;
+            lry.Width = lx.Width;
             tab.Add(lry);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = c.X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = y.Width + il;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = c.Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
 
             nudrx = new NumericUpDown();
             nudrx.Top = lrx.Top - 3;
@@ -2613,78 +2451,6 @@ namespace Designer2
             nudry.Value = ry;
             nudry.ValueChanged += new EventHandler(valueRychange);
             tab.Add(nudry);
-
-            Button up = new Button();
-            up.Text = "";
-            up.Height = nudx.Height + 6;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
-            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
-            Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
-            Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
-            Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-            tab.Add(left);
-
-            pbc = new PictureBox();
-            pbc.Height = up.Height;
-            pbc.Width = up.Width;
-            if (fill) tr = Properties.Resources.EllipseFill;
-            else tr = Properties.Resources.Ellipse;
-            tr.MakeTransparent(Color.White);
-            pbc.Image = tr;
-            pbc.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc.Top = right.Top;
-            pbc.Left = up.Left;
-            tab.Add(pbc);
 
             Button shrinkx = new Button();
             shrinkx.Text = up.Text;
@@ -3195,210 +2961,88 @@ namespace Designer2
             else tr = Properties.Resources.Triangle;
             loadInit(ref pb, tr, ref name, "Triangle" + getName());
 
-            tab.Add(pb);
-            tab.Add(name);
-
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
-
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = il;
-            y.Width = x.Width;
-            tab.Add(y);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = lPt[selectedPoint].X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = y.Width + il;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = lPt[selectedPoint].Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
-
-            Label ver = new Label();
-            ver.Text = "Vertices :";
-            ver.Top = y.Top + y.Height + 2 * il;
-            ver.Left = x.Left;
-            //ver.Width = nameWidth;
-            tab.Add(ver);
-
-            lb = new ListBox();
-            lb.Width = 82;
-            lb.Height = 48;
-            lb.Top = ver.Top + ver.Height;
-            lb.Left = nudy.Left + nudy.Width - lb.Width;
-            refreshList();
-            lb.SelectedIndexChanged += new EventHandler(selIndChange);
-            tab.Add(lb);
-
             f = new CheckBox();
-            f.Top = nudx.Top;
-            f.Left = nudx.Left + nudx.Width + 5 * il;
+            f.Top = name.Top + name.Height + il;
+            f.Left = il + labelWidth;
+            f.Width = 70;
             f.Text = "Fill";
             f.Checked = fill;
             f.CheckedChanged += new EventHandler(fillChange);
             tab.Add(f);
 
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
             Button up = new Button();
-            up.Text = "";
-            up.Height = 25;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = lb.Top + lb.Height + 2 * il;
-            up.Left = up.Width + il / 2;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
             Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
             Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
             Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
+            PictureBox pbc = new PictureBox();
 
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
+            loadXYcross(f.Top + f.Height + il * 2, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, Properties.Resources.Point);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
             left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = this.lPt[selectedPoint].X;
+            nudy.Value = this.lPt[selectedPoint].Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
             tab.Add(left);
+            tab.Add(pbc);
 
-            PictureBox center = new PictureBox();
-            center.Text = up.Text;
-            center.Height = up.Height;
-            center.Width = up.Width;
-            tr = Properties.Resources.Point;
-            tr.MakeTransparent(Color.White);
-            center.Image = tr;
-            center.SizeMode = PictureBoxSizeMode.Zoom;
-            center.Top = right.Top;
-            center.Left = up.Left;
-            tab.Add(center);
-
-            Button upT = new Button();
-            upT.Text = "";
-            upT.Height = up.Height;
-            upT.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            upT.BackgroundImage = tr;
-            upT.BackgroundImageLayout = ImageLayout.Zoom;
-            upT.Top = up.Top;
-            upT.Left = right.Left + 2 * right.Width + il;
-            upT.Tag = eDirection.iUp;
-            upT.Click += new EventHandler(move);
-            tab.Add(upT);
-
-            Button rightT = new Button();
-            rightT.Text = up.Text;
-            rightT.Height = up.Height;
-            rightT.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            rightT.BackgroundImage = tr;
-            rightT.BackgroundImageLayout = ImageLayout.Zoom;
-            rightT.Top = upT.Top + upT.Height;
-            rightT.Left = upT.Left + upT.Width;
-            rightT.Tag = eDirection.iRight;
-            rightT.Click += new EventHandler(move);
-            tab.Add(rightT);
-
-            Button downT = new Button();
-            downT.Text = up.Text;
-            downT.Height = up.Height;
-            downT.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            downT.BackgroundImage = tr;
-            downT.BackgroundImageLayout = ImageLayout.Zoom;
-            downT.Top = rightT.Top + rightT.Height;
-            downT.Left = upT.Left;
-            downT.Tag = eDirection.iDown;
-            downT.Click += new EventHandler(move);
-            tab.Add(downT);
-
-            Button leftT = new Button();
-            leftT.Text = up.Text;
-            leftT.Height = up.Height;
-            leftT.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            leftT.BackgroundImage = tr;
-            leftT.BackgroundImageLayout = ImageLayout.Zoom;
-            leftT.Top = rightT.Top;
-            leftT.Left = upT.Left - upT.Width;
-            leftT.Tag = eDirection.iLeft;
-            leftT.Click += new EventHandler(move);
-            tab.Add(leftT);
-
+            Button upTr = new Button();
+            Button rightTr = new Button();
+            Button downTr = new Button();
+            Button leftTr = new Button();
             pbt = new PictureBox();
-            pbt.Height = up.Height;
-            pbt.Width = up.Width;
+
             if (fill) tr = Properties.Resources.TriangleFill;
             else tr = Properties.Resources.Triangle;
-            tr.MakeTransparent(Color.White);
-            pbt.Image = tr;
-            pbt.SizeMode = PictureBoxSizeMode.Zoom;
-            pbt.Top = rightT.Top;
-            pbt.Left = upT.Left;
+
+            loadCross(down.Left, down.Top + down.Height + il, up.Height, ref upTr,
+                             ref rightTr, ref downTr, ref leftTr, ref pbt, tr);
+
+            upTr.Click += new EventHandler(move);
+            downTr.Click += new EventHandler(move);
+            rightTr.Click += new EventHandler(move);
+            leftTr.Click += new EventHandler(move);
+
+            tab.Add(upTr);
+            tab.Add(rightTr);
+            tab.Add(downTr);
+            tab.Add(leftTr);
             tab.Add(pbt);
+
+            Label lver = new Label();
+            lver.Text = "Vertices :";
+            lver.Top = ly.Top + ly.Height + (int)(il * 3.5);
+            lver.Left = lx.Left;
+
+            tab.Add(lver);
+
+            lb = new ListBox();
+            lb.Top = lver.Top + lver.Height;
+            lb.Left = il;
+            lb.Width = nudy.Left + nudy.Width - il;
+            lb.Height = 48;
+            refreshList();
+            lb.SelectedIndexChanged += new EventHandler(selIndChange);
+            tab.Add(lb);
 
             return tab;
         }
@@ -3946,9 +3590,6 @@ namespace Designer2
             else tr = Properties.Resources.Rectangle;
             loadInit(ref pb, tr, ref name, "Rectangle" + getName());
 
-            tab.Add(pb);
-            tab.Add(name);
-
             f = new CheckBox();
             f.Top = name.Top + name.Height + il;
             f.Left = il + labelWidth;
@@ -3957,215 +3598,77 @@ namespace Designer2
             f.CheckedChanged += new EventHandler(fillChange);
             tab.Add(f);
 
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = f.Top + f.Height + il * 6;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
-
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = il;
-            y.Width = x.Width;
-            tab.Add(y);
-
-            Label h = new Label();
-            h.Text = "H=";
-            h.Top = y.Top + y.Height + il * 8;
-            h.Left = il;
-            h.Width = x.Width;
-            tab.Add(h);
-
-            Label w = new Label();
-            w.Text = "W=";
-            w.Top = h.Top + h.Height + il;
-            w.Left = il;
-            w.Width = x.Width;
-            tab.Add(w);
-
+            Label lx = new Label();
+            Label ly = new Label();
             nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = r.X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
             nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = nudx.Left;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = r.Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
-
-            nudh = new NumericUpDown();
-            nudh.Top = h.Top - 3;
-            nudh.Left = nudx.Left;
-            nudh.Width = nudx.Width;
-            nudh.Minimum = nudx.Minimum;
-            nudh.Maximum = nudx.Maximum;
-            nudh.Value = r.Height;
-            nudh.ValueChanged += new EventHandler(valueHchange);
-            tab.Add(nudh);
-
-            nudw = new NumericUpDown();
-            nudw.Top = w.Top - 3;
-            nudw.Left = nudx.Left;
-            nudw.Width = nudx.Width;
-            nudw.Minimum = nudx.Minimum;
-            nudw.Maximum = nudx.Maximum;
-            nudw.Value = r.Width;
-            nudw.ValueChanged += new EventHandler(valueWchange);
-            tab.Add(nudw);
-
             Button up = new Button();
-            up.Text = "";
-            up.Height = nudx.Height + 6;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
-            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
             Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
             Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
             Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-            tab.Add(left);
-
             pbc = new PictureBox();
-            pbc.Height = up.Height;
-            pbc.Width = up.Width;
             if (fill) tr = Properties.Resources.RectangleFill;
             else tr = Properties.Resources.Rectangle;
-            tr.MakeTransparent(Color.White);
-            pbc.Image = tr;
-            pbc.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc.Top = right.Top;
-            pbc.Left = up.Left;
+
+            loadXYcross(f.Top + f.Height + il * 6, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, tr);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = r.X;
+            nudy.Value = r.Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
+            tab.Add(left);
             tab.Add(pbc);
 
+            Label h = new Label();
+            Label w = new Label();
+            nudh = new NumericUpDown();
+            nudw = new NumericUpDown();
             Button shrh = new Button();
-            shrh.Text = "";
-            shrh.Height = up.Height;
-            shrh.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrh.BackgroundImage = tr;
-            shrh.BackgroundImageLayout = ImageLayout.Zoom;
-            shrh.Top = nudh.Top + nudh.Height + il / 2 - (int)(up.Height * 1.5);
-            shrh.Left = nudh.Left + nudh.Width + il * 2 + up.Width;
-            shrh.Tag = eDirection.iUp;
-            shrh.Click += new EventHandler(valueHchange);
-            tab.Add(shrh);
-
             Button shrr = new Button();
-            shrr.Text = up.Text;
-            shrr.Height = up.Height;
-            shrr.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            shrr.BackgroundImage = tr;
-            shrr.BackgroundImageLayout = ImageLayout.Zoom;
-            shrr.Top = shrh.Top + shrh.Height;
-            shrr.Left = shrh.Left + shrh.Width;
-            shrr.Tag = eDirection.iRight;
-            shrr.Click += new EventHandler(valueWchange);
-            tab.Add(shrr);
-
             Button shrd = new Button();
-            shrd.Text = up.Text;
-            shrd.Height = up.Height;
-            shrd.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            shrd.BackgroundImage = tr;
-            shrd.BackgroundImageLayout = ImageLayout.Zoom;
-            shrd.Top = shrr.Top + shrr.Height;
-            shrd.Left = shrh.Left;
-            shrd.Tag = eDirection.iDown;
-            shrd.Click += new EventHandler(valueHchange);
-            tab.Add(shrd);
-
             Button shrl = new Button();
-            shrl.Text = up.Text;
-            shrl.Height = up.Height;
-            shrl.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrl.BackgroundImage = tr;
-            shrl.BackgroundImageLayout = ImageLayout.Zoom;
-            shrl.Top = shrr.Top;
-            shrl.Left = shrh.Left - shrh.Width;
-            shrl.Tag = eDirection.iLeft;
-            shrl.Click += new EventHandler(valueWchange);
-            tab.Add(shrl);
-
             PictureBox pbc2 = new PictureBox();
-            pbc2.Height = up.Height;
-            pbc2.Width = up.Width;
-            tr = Properties.Resources.RectangleSize;
-            tr.MakeTransparent(Color.White);
-            pbc2.Image = tr;
-            pbc2.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc2.Top = shrr.Top;
-            pbc2.Left = shrh.Left;
+
+            loadXYcross(ly.Top + ly.Height + il * 9, il, ref h, ref w,
+            ref nudh, ref nudw, ref shrh, ref shrr, ref shrd, ref shrl,
+            ref pbc2, Properties.Resources.RectangleSize);
+            h.Text = "H=";
+            w.Text = "W=";
+
+            nudh.ValueChanged += new EventHandler(valueHchange);
+            nudw.ValueChanged += new EventHandler(valueWchange);
+            shrh.Click += new EventHandler(valueHchange);
+            shrd.Click += new EventHandler(valueHchange);
+            shrr.Click += new EventHandler(valueWchange);
+            shrl.Click += new EventHandler(valueWchange);
+
+            nudh.Value = r.Height;
+            nudw.Value = r.Width;
+
+            tab.Add(h);
+            tab.Add(w);
+            tab.Add(nudh);
+            tab.Add(nudw);
+            tab.Add(shrh);
+            tab.Add(shrr);
+            tab.Add(shrd);
+            tab.Add(shrl);
             tab.Add(pbc2);
 
             return tab;
@@ -4618,80 +4121,85 @@ namespace Designer2
             f.CheckedChanged += new EventHandler(fillChange);
             tab.Add(f);
 
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = f.Top + f.Height + il * 6;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
+            Button up = new Button();
+            Button right = new Button();
+            Button down = new Button();
+            Button left = new Button();
+            pbc = new PictureBox();
+            if (fill) tr = Properties.Resources.roundRectFill;
+            else tr = Properties.Resources.roundRect;
 
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = il;
-            y.Width = x.Width;
-            tab.Add(y);
+            loadXYcross(f.Top + f.Height + il * 6, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, tr);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = rec.X;
+            nudy.Value = rec.Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
+            tab.Add(left);
+            tab.Add(pbc);
 
             Label h = new Label();
-            h.Text = "H=";
-            h.Top = y.Top + y.Height + il * 8;
-            h.Left = il;
-            h.Width = x.Width;
-            tab.Add(h);
-
             Label w = new Label();
+            nudh = new NumericUpDown();
+            nudw = new NumericUpDown();
+            Button shrh = new Button();
+            Button shrr = new Button();
+            Button shrd = new Button();
+            Button shrl = new Button();
+            PictureBox pbc2 = new PictureBox();
+
+            loadXYcross(ly.Top + ly.Height + il * 9, il, ref h, ref w,
+            ref nudh, ref nudw, ref shrh, ref shrr, ref shrd, ref shrl,
+            ref pbc2, Properties.Resources.RectangleSize);
+            h.Text = "H=";
             w.Text = "W=";
-            w.Top = h.Top + h.Height + il;
-            w.Left = il;
-            w.Width = x.Width;
+
+            nudh.ValueChanged += new EventHandler(valueHchange);
+            nudw.ValueChanged += new EventHandler(valueWchange);
+            shrh.Click += new EventHandler(valueHchange);
+            shrd.Click += new EventHandler(valueHchange);
+            shrr.Click += new EventHandler(valueWchange);
+            shrl.Click += new EventHandler(valueWchange);
+
+            nudh.Value = rec.Height;
+            nudw.Value = rec.Width;
+
+            tab.Add(h);
             tab.Add(w);
+            tab.Add(nudh);
+            tab.Add(nudw);
+            tab.Add(shrh);
+            tab.Add(shrr);
+            tab.Add(shrd);
+            tab.Add(shrl);
+            tab.Add(pbc2);
 
             Label lr = new Label();
             lr.Text = "R=";
             lr.Top = w.Top + w.Height + il * 6;
             lr.Left = il;
-            lr.Width = x.Width;
+            lr.Width = lx.Width;
             tab.Add(lr);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = rec.X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = nudx.Left;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = rec.Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
-
-            nudh = new NumericUpDown();
-            nudh.Top = h.Top - 3;
-            nudh.Left = nudx.Left;
-            nudh.Width = nudx.Width;
-            nudh.Minimum = nudx.Minimum;
-            nudh.Maximum = nudx.Maximum;
-            nudh.Value = rec.Height;
-            nudh.ValueChanged += new EventHandler(valueHchange);
-            tab.Add(nudh);
-
-            nudw = new NumericUpDown();
-            nudw.Top = w.Top - 3;
-            nudw.Left = nudx.Left;
-            nudw.Width = nudx.Width;
-            nudw.Minimum = nudx.Minimum;
-            nudw.Maximum = nudx.Maximum;
-            nudw.Value = rec.Width;
-            nudw.ValueChanged += new EventHandler(valueWchange);
-            tab.Add(nudw);
 
             nur = new NumericUpDown();
             nur.Top = lr.Top - 3;
@@ -4702,149 +4210,6 @@ namespace Designer2
             nur.Value = r;
             nur.ValueChanged += new EventHandler(valueRchange);
             tab.Add(nur);
-
-            Button up = new Button();
-            up.Text = "";
-            up.Height = nudx.Height + 6;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
-            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
-            Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
-            Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
-            Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-            tab.Add(left);
-
-            pbc = new PictureBox();
-            pbc.Height = up.Height;
-            pbc.Width = up.Width;
-            if (fill) tr = Properties.Resources.roundRectFill;
-            else tr = Properties.Resources.roundRect;
-            tr.MakeTransparent(Color.White);
-            pbc.Image = tr;
-            pbc.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc.Top = right.Top;
-            pbc.Left = up.Left;
-            tab.Add(pbc);
-
-            Button shrh = new Button();
-            shrh.Text = "";
-            shrh.Height = up.Height;
-            shrh.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrh.BackgroundImage = tr;
-            shrh.BackgroundImageLayout = ImageLayout.Zoom;
-            shrh.Top = nudh.Top + nudh.Height + il / 2 - (int)(up.Height * 1.5);
-            shrh.Left = nudh.Left + nudh.Width + il * 2 + up.Width;
-            shrh.Tag = eDirection.iUp;
-            shrh.Click += new EventHandler(valueHchange);
-            tab.Add(shrh);
-
-            Button shrr = new Button();
-            shrr.Text = up.Text;
-            shrr.Height = up.Height;
-            shrr.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            shrr.BackgroundImage = tr;
-            shrr.BackgroundImageLayout = ImageLayout.Zoom;
-            shrr.Top = shrh.Top + shrh.Height;
-            shrr.Left = shrh.Left + shrh.Width;
-            shrr.Tag = eDirection.iRight;
-            shrr.Click += new EventHandler(valueWchange);
-            tab.Add(shrr);
-
-            Button shrd = new Button();
-            shrd.Text = up.Text;
-            shrd.Height = up.Height;
-            shrd.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            shrd.BackgroundImage = tr;
-            shrd.BackgroundImageLayout = ImageLayout.Zoom;
-            shrd.Top = shrr.Top + shrr.Height;
-            shrd.Left = shrh.Left;
-            shrd.Tag = eDirection.iDown;
-            shrd.Click += new EventHandler(valueHchange);
-            tab.Add(shrd);
-
-            Button shrl = new Button();
-            shrl.Text = up.Text;
-            shrl.Height = up.Height;
-            shrl.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrl.BackgroundImage = tr;
-            shrl.BackgroundImageLayout = ImageLayout.Zoom;
-            shrl.Top = shrr.Top;
-            shrl.Left = shrh.Left - shrh.Width;
-            shrl.Tag = eDirection.iLeft;
-            shrl.Click += new EventHandler(valueWchange);
-            tab.Add(shrl);
-
-            PictureBox pbc2 = new PictureBox();
-            pbc2.Height = up.Height;
-            pbc2.Width = up.Width;
-            tr = Properties.Resources.RectangleSize;
-            tr.MakeTransparent(Color.White);
-            pbc2.Image = tr;
-            pbc2.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc2.Top = shrr.Top;
-            pbc2.Left = shrh.Left;
-            tab.Add(pbc2);
 
             Button shrink = new Button();
             shrink.Text = "";
@@ -5405,60 +4770,63 @@ namespace Designer2
             f.CheckedChanged += new EventHandler(fillChange);
             tab.Add(f);
 
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = f.Top + f.Height + il * 6;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
+            Button up = new Button();
+            Button right = new Button();
+            Button down = new Button();
+            Button left = new Button();
+            pbc = new PictureBox();
+            if (fill) tr = Properties.Resources.PolygonFill;
+            else tr = Properties.Resources.Polygon;
 
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = il;
-            y.Width = x.Width;
-            tab.Add(y);
+            loadXYcross(f.Top + f.Height + il * 6, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, tr);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = c.X;
+            nudy.Value = c.Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
+            tab.Add(left);
+            tab.Add(pbc);
 
             Label ra = new Label();
             ra.Text = "R=";
-            ra.Top = y.Top + y.Height + il * 5;
+            ra.Top = ly.Top + ly.Height + il * 5;
             ra.Left = il;
-            ra.Width = x.Width;
+            ra.Width = lx.Width;
             tab.Add(ra);
 
             Label ls = new Label();
             ls.Text = "Sides";
             ls.Top = ra.Top + ra.Height + il;
             ls.Left = il;
-            ls.Width = x.Width;
+            ls.Width = lx.Width;
             tab.Add(ls);
 
             Label lang = new Label();
             lang.Text = "Angle";
             lang.Top = ls.Top + ls.Height + il;
             lang.Left = il;
-            lang.Width = x.Width;
+            lang.Width = lx.Width;
             tab.Add(lang);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = c.X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = y.Width + il;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = c.Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
 
             nudr = new NumericUpDown();
             nudr.Top = ra.Top - 3;
@@ -5489,78 +4857,6 @@ namespace Designer2
             nudang.Value = angle;
             nudang.ValueChanged += new EventHandler(valueAngChange);
             tab.Add(nudang);
-
-            Button up = new Button();
-            up.Text = "";
-            up.Height = nudx.Height + 6;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudx.Top + nudx.Height + il / 2 - (int)(up.Height * 1.5);
-            up.Left = nudx.Left + nudx.Width + il * 2 + up.Width;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
-            Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
-            Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
-            Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-            tab.Add(left);
-
-            pbc = new PictureBox();
-            pbc.Height = up.Height;
-            pbc.Width = up.Width;
-            if (fill) tr = Properties.Resources.PolygonFill;
-            else tr = Properties.Resources.Polygon;
-            tr.MakeTransparent(Color.White);
-            pbc.Image = tr;
-            pbc.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc.Top = right.Top;
-            pbc.Left = up.Left;
-            tab.Add(pbc);
 
             Button shrink = new Button();
             shrink.Text = up.Text;
@@ -6291,66 +5587,13 @@ namespace Designer2
             Bitmap tr = arcBitmap();
             loadInit(ref pb, tr, ref name, "Arc" + getName());
 
-            tab.Add(pb);
-            tab.Add(name);
-
-            Label x = new Label();
-            x.Text = "X=";
-            x.Top = name.Top + name.Height + il;
-            x.Left = il;
-            x.Width = labelWidth;
-            tab.Add(x);
-
-            Label y = new Label();
-            y.Text = "Y=";
-            y.Top = x.Top + x.Height + il;
-            y.Left = x.Left;
-            y.Width = x.Width;
-            tab.Add(y);
-
-            Label ra = new Label();
-            ra.Text = "R=";
-            ra.Top = y.Top + y.Height + il;
-            ra.Left = x.Left;
-            ra.Width = x.Width;
-            tab.Add(ra);
-
-            nudx = new NumericUpDown();
-            nudx.Top = x.Top - 3;
-            nudx.Left = x.Width + il;
-            nudx.Width = nudWidth;
-            nudx.Minimum = MIN;
-            nudx.Maximum = MAX;
-            nudx.Value = c.X;
-            nudx.ValueChanged += new EventHandler(valueXchange);
-            tab.Add(nudx);
-
-            nudy = new NumericUpDown();
-            nudy.Top = y.Top - 3;
-            nudy.Left = y.Width + il;
-            nudy.Width = nudx.Width;
-            nudy.Minimum = nudx.Minimum;
-            nudy.Maximum = nudx.Maximum;
-            nudy.Value = c.Y;
-            nudy.ValueChanged += new EventHandler(valueYchange);
-            tab.Add(nudy);
-
-            nudr = new NumericUpDown();
-            nudr.Top = ra.Top - 3;
-            nudr.Left = ra.Width + il;
-            nudr.Width = nudx.Width;
-            nudr.Minimum = nudx.Minimum;
-            nudr.Maximum = nudx.Maximum;
-            nudr.Value = r;
-            nudr.ValueChanged += new EventHandler(valueRchange);
-            tab.Add(nudr);
-
             f = new CheckBox();
-            f.Top = nudx.Top;
-            f.Left = nudx.Left + nudx.Width + 5 * il;
+            f.Top = name.Top + name.Height + il;
+            f.Left = il + labelWidth;
             f.Text = "Fill";
             f.Checked = fill;
             f.CheckedChanged += new EventHandler(fillChange);
+            f.Width = 40;
             tab.Add(f);
 
             cb = new ComboBox();
@@ -6363,92 +5606,74 @@ namespace Designer2
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.Top = f.Top + f.Height + il;
             cb.Left = f.Left;
-            cb.Width = 40;
+            cb.Width = 50;
             cb.SelectedIndex = (int)q - 1;
             cb.SelectedIndexChanged += new EventHandler(quarterChange);
             tab.Add(cb);
 
             PictureBox pbar = new PictureBox();
-            pbar.Height = picHeight * 2;
+            pbar.Height = picHeight * 2 + il;
             pbar.Width = pbar.Height;
             tr = Properties.Resources.AllArc;
             tr.MakeTransparent(Color.White);
             pbar.Image = tr;
             pbar.SizeMode = PictureBoxSizeMode.Zoom;
-            pbar.Top = cb.Top + cb.Height + il;
-            pbar.Left = cb.Left;
+            pbar.Top = f.Top + il / 2;
+            pbar.Left = cb.Left + cb.Width + il * 8; ;
             tab.Add(pbar);
 
+            Label lx = new Label();
+            Label ly = new Label();
+            nudx = new NumericUpDown();
+            nudy = new NumericUpDown();
             Button up = new Button();
-            up.Text = "";
-            up.Height = buttonSize;
-            up.Width = up.Height;
-
-            tr = Properties.Resources.blackArrowUp;
-            tr.MakeTransparent(Color.White);
-            up.BackgroundImage = tr;
-            up.BackgroundImageLayout = ImageLayout.Zoom;
-            up.Top = nudr.Top + nudr.Height + 4 * il;
-            up.Left = nudr.Left + nudr.Width - up.Width;
-            up.Tag = eDirection.iUp;
-            up.Click += new EventHandler(valueYchange);
-            tab.Add(up);
-
             Button right = new Button();
-            right.Text = up.Text;
-            right.Height = up.Height;
-            right.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowRight;
-            tr.MakeTransparent(Color.White);
-            right.BackgroundImage = tr;
-            right.BackgroundImageLayout = ImageLayout.Zoom;
-            right.Top = up.Top + up.Height;
-            right.Left = up.Left + up.Width;
-            right.Tag = eDirection.iRight;
-            right.Click += new EventHandler(valueXchange);
-            tab.Add(right);
-
             Button down = new Button();
-            down.Text = up.Text;
-            down.Height = up.Height;
-            down.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowDown;
-            tr.MakeTransparent(Color.White);
-            down.BackgroundImage = tr;
-            down.BackgroundImageLayout = ImageLayout.Zoom;
-            down.Top = right.Top + up.Height;
-            down.Left = up.Left;
-            down.Tag = eDirection.iDown;
-            down.Click += new EventHandler(valueYchange);
-            tab.Add(down);
-
             Button left = new Button();
-            left.Text = up.Text;
-            left.Height = up.Height;
-            left.Width = up.Width;
-
-            tr = Properties.Resources.blackArrowLeft;
-            tr.MakeTransparent(Color.White);
-            left.BackgroundImage = tr;
-            left.BackgroundImageLayout = ImageLayout.Zoom;
-            left.Top = right.Top;
-            left.Left = up.Left - up.Width;
-            left.Tag = eDirection.iLeft;
-            left.Click += new EventHandler(valueXchange);
-            tab.Add(left);
-
             pbc = new PictureBox();
-            pbc.Height = up.Height;
-            pbc.Width = up.Width;
             tr = arcBitmap();
-            tr.MakeTransparent(Color.White);
-            pbc.Image = tr;
-            pbc.SizeMode = PictureBoxSizeMode.Zoom;
-            pbc.Top = right.Top;
-            pbc.Left = up.Left;
+
+            loadXYcross(cb.Top + cb.Height + il * 6, il, ref lx, ref ly,
+            ref nudx, ref nudy, ref up, ref right, ref down, ref left, ref pbc, tr);
+
+            nudx.ValueChanged += new EventHandler(valueXchange);
+            nudy.ValueChanged += new EventHandler(valueYchange);
+            up.Click += new EventHandler(valueYchange);
+            down.Click += new EventHandler(valueYchange);
+            right.Click += new EventHandler(valueXchange);
+            left.Click += new EventHandler(valueXchange);
+
+            nudx.Value = c.X;
+            nudy.Value = c.Y;
+
+            tab.Add(pb);
+            tab.Add(name);
+            tab.Add(lx);
+            tab.Add(ly);
+            tab.Add(nudx);
+            tab.Add(nudy);
+            tab.Add(up);
+            tab.Add(right);
+            tab.Add(down);
+            tab.Add(left);
             tab.Add(pbc);
+
+            Label ra = new Label();
+            ra.Text = "R=";
+            ra.Top = ly.Top + ly.Height + il * 6;
+            ra.Left = lx.Left;
+            ra.Width = lx.Width;
+            tab.Add(ra);
+
+            nudr = new NumericUpDown();
+            nudr.Top = ra.Top - 3;
+            nudr.Left = ra.Width + il;
+            nudr.Width = nudx.Width;
+            nudr.Minimum = nudx.Minimum;
+            nudr.Maximum = nudx.Maximum;
+            nudr.Value = r;
+            nudr.ValueChanged += new EventHandler(valueRchange);
+            tab.Add(nudr);
 
             Button shrink = new Button();
             shrink.Text = up.Text;
