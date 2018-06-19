@@ -528,16 +528,12 @@ namespace Designer2
             nudx.Width = nudWidth;
             nudx.Minimum = MIN;
             nudx.Maximum = MAX;
-            //nudx.Value = p.X;
-            //nudx.ValueChanged += new EventHandler(valueXchange);
 
             nudy.Top = ly.Top - 3;
             nudy.Left = ly.Width + il;
             nudy.Width = nudx.Width;
             nudy.Minimum = nudx.Minimum;
             nudy.Maximum = nudx.Maximum;
-            // nudy.Value = p.Y;
-            //nudy.ValueChanged += new EventHandler(valueYchange);
 
             int size = nudx.Height + 8;
 
@@ -546,6 +542,53 @@ namespace Designer2
 
             loadCross(x, y, size, ref up, ref right, ref down,
                 ref left, ref pbc, center);
+        }
+
+        //---
+        protected void loadUpDown(int x, int y, ref Label l, string txt, ref NumericUpDown nud,
+            ref Button shrink, ref Button grow, ref PictureBox pb, Bitmap bmp)
+        {
+            l.Text = txt;
+            l.Top = y;
+            l.Left = x;
+            l.Width = labelWidth;
+
+            nud.Top = l.Top - 3;
+            nud.Left = l.Width + il;
+            nud.Width = nudWidth;
+            nud.Minimum = MIN;
+            nud.Maximum = MAX;
+
+            Bitmap tr = Properties.Resources.Shrink;
+            tr.MakeTransparent(Color.White);
+            shrink.BackgroundImage = tr;
+            shrink.BackgroundImageLayout = ImageLayout.Zoom;
+            shrink.Text = "";
+            shrink.Height = nud.Height + 8;
+            shrink.Width = shrink.Height;
+            shrink.Top = nud.Top - (shrink.Height - nud.Height) / 2;
+            shrink.Left = nud.Left + nud.Width + il * 3;
+            shrink.Tag = eDirection.iLeft;
+
+            tr = Properties.Resources.Increase;
+            tr.MakeTransparent(Color.White);
+            grow.BackgroundImage = tr;
+            grow.BackgroundImageLayout = ImageLayout.Zoom;
+            grow.Text = "";
+            grow.Height = shrink.Height;
+            grow.Width = shrink.Height;
+            grow.Top = shrink.Top;
+            grow.Left = shrink.Left + shrink.Width + shrink.Width;
+            grow.Tag = eDirection.iRight;
+
+            pb.Height = shrink.Height;
+            pb.Width = shrink.Width;
+
+            bmp.MakeTransparent(Color.White);
+            pb.Image = bmp;
+            pb.SizeMode = PictureBoxSizeMode.Zoom;
+            pb.Top = shrink.Top;
+            pb.Left = shrink.Left + shrink.Width;
         }
 
         //---
@@ -1877,64 +1920,24 @@ namespace Designer2
             tab.Add(pbc);
 
             Label ra = new Label();
-            ra.Text = "R=";
-            ra.Top = ly.Top + ly.Height + il * 6;
-            ra.Left = il;
-            ra.Width = lx.Width;
-            tab.Add(ra);
-
             nudr = new NumericUpDown();
-            nudr.Top = ra.Top - 3;
-            nudr.Left = ra.Width + il;
-            nudr.Width = nudx.Width;
-            nudr.Minimum = nudx.Minimum;
-            nudr.Maximum = nudx.Maximum;
-            nudr.Value = r;
-            nudr.ValueChanged += new EventHandler(valueRchange);
-            tab.Add(nudr);
-
             Button shrink = new Button();
-            shrink.Text = up.Text;
-            shrink.Height = up.Height;
-            shrink.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrink.BackgroundImage = tr;
-            shrink.BackgroundImageLayout = ImageLayout.Zoom;
-            shrink.Top = nudr.Top + nudr.Height / 2 - shrink.Height / 2;
-            shrink.Left = nudr.Left + nudr.Width + 2 * il;
-            shrink.Tag = eDirection.iLeft;
-            shrink.Click += new EventHandler(valueRchange);
-            tab.Add(shrink);
-
             Button increase = new Button();
-            increase.Text = up.Text;
-            increase.Height = up.Height;
-            increase.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increase.BackgroundImage = tr;
-            increase.BackgroundImageLayout = ImageLayout.Zoom;
-            increase.Top = shrink.Top;
-            increase.Left = right.Left;
-            increase.Tag = eDirection.iRight;
-            increase.Click += new EventHandler(valueRchange);
-            tab.Add(increase);
-
             PictureBox pbr = new PictureBox();
 
-            pbr.Height = up.Height;
-            pbr.Width = up.Width;
-            pbr.Top = shrink.Top;
-            pbr.Left = shrink.Left + shrink.Width;
+            loadUpDown(il, ly.Top + ly.Height + il * 6, ref ra, "R=", ref nudr,
+                ref shrink, ref increase, ref pbr, Properties.Resources.Radius);
 
-            tr = Properties.Resources.Radius;
-            tr.MakeTransparent(Color.White);
+            nudr.Value = r;
 
-            pbr.Image = tr;
-            pbr.SizeMode = PictureBoxSizeMode.Zoom;
+            nudr.ValueChanged += new EventHandler(valueRchange);
+            shrink.Click += new EventHandler(valueRchange);
+            increase.Click += new EventHandler(valueRchange);
+
+            tab.Add(ra);
+            tab.Add(nudr);
+            tab.Add(shrink);
+            tab.Add(increase);
             tab.Add(pbr);
 
             return tab;
@@ -2419,126 +2422,48 @@ namespace Designer2
             tab.Add(pbc);
 
             Label lrx = new Label();
-            lrx.Text = "Rx=";
-            lrx.Top = ly.Top + ly.Height + il * 6;
-            lrx.Left = il;
-            lrx.Width = lx.Width;
-            tab.Add(lrx);
-
-            Label lry = new Label();
-            lry.Text = "Ry=";
-            lry.Top = lrx.Top + lrx.Height + il;
-            lry.Left = il;
-            lry.Width = lx.Width;
-            tab.Add(lry);
-
             nudrx = new NumericUpDown();
-            nudrx.Top = lrx.Top - 3;
-            nudrx.Left = lrx.Width + il;
-            nudrx.Width = nudx.Width;
-            nudrx.Minimum = 2;
-            nudrx.Maximum = nudx.Maximum;
-            nudrx.Value = rx;
-            nudrx.ValueChanged += new EventHandler(valueRxchange);
-            tab.Add(nudrx);
-
-            nudry = new NumericUpDown();
-            nudry.Top = lry.Top - 3;
-            nudry.Left = lry.Width + il;
-            nudry.Width = nudx.Width;
-            nudry.Minimum = 2;
-            nudry.Maximum = nudx.Maximum;
-            nudry.Value = ry;
-            nudry.ValueChanged += new EventHandler(valueRychange);
-            tab.Add(nudry);
-
-            Button shrinkx = new Button();
-            shrinkx.Text = up.Text;
-            shrinkx.Height = up.Height;
-            shrinkx.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrinkx.BackgroundImage = tr;
-            shrinkx.BackgroundImageLayout = ImageLayout.Zoom;
-            shrinkx.Top = nudrx.Top + nudrx.Height / 2 - shrinkx.Height / 2;
-            shrinkx.Left = nudrx.Left + nudrx.Width + 2 * il;
-            shrinkx.Tag = eDirection.iLeft;
-            shrinkx.Click += new EventHandler(valueRxchange);
-            tab.Add(shrinkx);
-
-            Button increasex = new Button();
-            increasex.Text = up.Text;
-            increasex.Height = up.Height;
-            increasex.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increasex.BackgroundImage = tr;
-            increasex.BackgroundImageLayout = ImageLayout.Zoom;
-            increasex.Top = shrinkx.Top;
-            increasex.Left = right.Left;
-            increasex.Tag = eDirection.iRight;
-            increasex.Click += new EventHandler(valueRxchange);
-            tab.Add(increasex);
-
-            PictureBox pbrx = new PictureBox();
-
-            pbrx.Height = up.Height;
-            pbrx.Width = up.Width;
-            pbrx.Top = shrinkx.Top;
-            pbrx.Left = shrinkx.Left + shrinkx.Width;
-
-            tr = Properties.Resources.EllipseRadiusX;
-            tr.MakeTransparent(Color.White);
-
-            pbrx.Image = tr;
-            pbrx.SizeMode = PictureBoxSizeMode.Zoom;
-            tab.Add(pbrx);
-
-            Button shrinky = new Button();
-            shrinky.Text = up.Text;
-            shrinky.Height = up.Height;
-            shrinky.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrinky.BackgroundImage = tr;
-            shrinky.BackgroundImageLayout = ImageLayout.Zoom;
-            shrinky.Top = nudry.Top + nudry.Height / 2 - shrinky.Height / 2;
-            shrinky.Left = nudry.Left + nudry.Width + 2 * il;
-            shrinky.Tag = eDirection.iLeft;
-            shrinky.Click += new EventHandler(valueRychange);
-            tab.Add(shrinky);
-
-            Button increasey = new Button();
-            increasey.Text = up.Text;
-            increasey.Height = up.Height;
-            increasey.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increasey.BackgroundImage = tr;
-            increasey.BackgroundImageLayout = ImageLayout.Zoom;
-            increasey.Top = shrinky.Top;
-            increasey.Left = right.Left;
-            increasey.Tag = eDirection.iRight;
-            increasey.Click += new EventHandler(valueRychange);
-            tab.Add(increasey);
-
+            Button shrink = new Button();
+            Button increase = new Button();
             PictureBox pbr = new PictureBox();
 
-            pbr.Height = up.Height;
-            pbr.Width = up.Width;
-            pbr.Top = shrinky.Top;
-            pbr.Left = shrinky.Left + shrinky.Width;
+            loadUpDown(il, ly.Top + ly.Height + il * 6, ref lrx, "Rx=", ref nudrx,
+                ref shrink, ref increase, ref pbr, Properties.Resources.EllipseRadiusX);
 
-            tr = Properties.Resources.EllipseRadiusY;
-            tr.MakeTransparent(Color.White);
+            nudrx.Value = rx;
+            nudrx.Minimum = 2;
 
-            pbr.Image = tr;
-            pbr.SizeMode = PictureBoxSizeMode.Zoom;
+            nudrx.ValueChanged += new EventHandler(valueRxchange);
+            shrink.Click += new EventHandler(valueRxchange);
+            increase.Click += new EventHandler(valueRxchange);
+
+            tab.Add(lrx);
+            tab.Add(nudrx);
+            tab.Add(shrink);
+            tab.Add(increase);
             tab.Add(pbr);
+
+            Label lry = new Label();
+            nudry = new NumericUpDown();
+            Button shrinky = new Button();
+            Button increasey = new Button();
+            PictureBox pbry = new PictureBox();
+
+            loadUpDown(il, lrx.Top + lrx.Height + il * 2, ref lry, "Ry=", ref nudry,
+                ref shrinky, ref increasey, ref pbry, Properties.Resources.EllipseRadiusY);
+
+            nudry.Value = ry;
+            nudry.Minimum = 2;
+
+            nudry.ValueChanged += new EventHandler(valueRychange);
+            shrinky.Click += new EventHandler(valueRychange);
+            increasey.Click += new EventHandler(valueRychange);
+
+            tab.Add(lry);
+            tab.Add(nudry);
+            tab.Add(shrinky);
+            tab.Add(increasey);
+            tab.Add(pbry);
 
             return tab;
         }
@@ -4195,64 +4120,25 @@ namespace Designer2
             tab.Add(pbc2);
 
             Label lr = new Label();
-            lr.Text = "R=";
-            lr.Top = w.Top + w.Height + il * 6;
-            lr.Left = il;
-            lr.Width = lx.Width;
-            tab.Add(lr);
-
             nur = new NumericUpDown();
-            nur.Top = lr.Top - 3;
-            nur.Left = nudx.Left;
-            nur.Width = nudx.Width;
-            nur.Minimum = 1;
-            nur.Maximum = nudx.Maximum;
-            nur.Value = r;
-            nur.ValueChanged += new EventHandler(valueRchange);
-            tab.Add(nur);
-
             Button shrink = new Button();
-            shrink.Text = "";
-            shrink.Height = up.Height;
-            shrink.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrink.BackgroundImage = tr;
-            shrink.BackgroundImageLayout = ImageLayout.Zoom;
-            shrink.Top = nur.Top + nur.Height / 2 - shrink.Height / 2;
-            shrink.Left = nur.Left + nur.Width + 2 * il;
-            shrink.Tag = eDirection.iLeft;
-            shrink.Click += new EventHandler(valueRchange);
-            tab.Add(shrink);
-
             Button increase = new Button();
-            increase.Text = shrink.Text;
-            increase.Height = shrink.Height;
-            increase.Width = shrink.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increase.BackgroundImage = tr;
-            increase.BackgroundImageLayout = ImageLayout.Zoom;
-            increase.Top = shrink.Top;
-            increase.Left = shrink.Left + 2 * shrink.Width;
-            increase.Tag = eDirection.iRight;
-            increase.Click += new EventHandler(valueRchange);
-            tab.Add(increase);
-
             PictureBox pbr = new PictureBox();
 
-            pbr.Height = shrink.Height;
-            pbr.Width = shrink.Width;
-            pbr.Top = shrink.Top;
-            pbr.Left = shrink.Left + shrink.Width;
+            loadUpDown(il, w.Top + w.Height + il * 6, ref lr, "R=", ref nur,
+                ref shrink, ref increase, ref pbr, Properties.Resources.Arc);
 
-            tr = Properties.Resources.Arc;
-            tr.MakeTransparent(Color.White);
+            nur.Minimum = 1;
+            nur.Value = r;
 
-            pbr.Image = tr;
-            pbr.SizeMode = PictureBoxSizeMode.Zoom;
+            nur.ValueChanged += new EventHandler(valueRchange);
+            shrink.Click += new EventHandler(valueRchange);
+            increase.Click += new EventHandler(valueRchange);
+
+            tab.Add(lr);
+            tab.Add(nur);
+            tab.Add(shrink);
+            tab.Add(increase);
             tab.Add(pbr);
 
             return tab;
