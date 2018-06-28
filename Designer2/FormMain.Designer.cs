@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.SelectedIcoLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -91,19 +92,34 @@
             this.toolSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuItemsProperty = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuCanvasSize = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuCanvas = new System.Windows.Forms.ToolStripMenuItem();
+            this.pixelSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.originPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuBackgroundColor = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuAutoLoad = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRemember = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDefColor = new System.Windows.Forms.ToolStripComboBox();
             this.MenuSkin = new System.Windows.Forms.ToolStripComboBox();
+            this.colorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectedItemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.specialPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hotPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStatistic = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.canvasPanel = new System.Windows.Forms.Panel();
+            this.MenuCS = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Draw = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolPixSize = new System.Windows.Forms.ToolStripComboBox();
+            this.toolOffsetX = new System.Windows.Forms.ToolStripTextBox();
+            this.toolOffsetY = new System.Windows.Forms.ToolStripTextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.iconsTab = new System.Windows.Forms.TabPage();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelAmount = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonDown = new System.Windows.Forms.Button();
@@ -113,53 +129,52 @@
             this.buttonAdd = new System.Windows.Forms.Button();
             this.listBoxIcons = new System.Windows.Forms.ListBox();
             this.itemsTab = new System.Windows.Forms.TabPage();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.pictureBox7 = new System.Windows.Forms.PictureBox();
+            this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
-            this.comboBoxItems = new System.Windows.Forms.ComboBox();
             this.labelAmountItem = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonDownItem = new System.Windows.Forms.Button();
             this.buttonUpItem = new System.Windows.Forms.Button();
             this.buttonDelItem = new System.Windows.Forms.Button();
-            this.buttonInsertItem = new System.Windows.Forms.Button();
-            this.buttonAddItem = new System.Windows.Forms.Button();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.listBoxItems = new System.Windows.Forms.ListBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pictureBox10 = new System.Windows.Forms.PictureBox();
+            this.comboBoxItems = new System.Windows.Forms.ComboBox();
+            this.buttonAddItem = new System.Windows.Forms.Button();
+            this.pictureBox9 = new System.Windows.Forms.PictureBox();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.buttonInsertItem = new System.Windows.Forms.Button();
             this.propertyTab = new System.Windows.Forms.TabPage();
             this.buttonNextItem = new System.Windows.Forms.Button();
             this.buttonPrewItem = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.pictureBox7 = new System.Windows.Forms.PictureBox();
-            this.pictureBox8 = new System.Windows.Forms.PictureBox();
-            this.pictureBox9 = new System.Windows.Forms.PictureBox();
-            this.pictureBox10 = new System.Windows.Forms.PictureBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.vBar1 = new System.Windows.Forms.VScrollBar();
+            this.hBar1 = new System.Windows.Forms.HScrollBar();
+            this.forceDraw = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
+            this.MenuCS.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.iconsTab.SuspendLayout();
-            this.itemsTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.propertyTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.itemsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            this.propertyTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -704,23 +719,39 @@
             // MenuSettings
             // 
             this.MenuSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MenuCanvasSize,
+            this.MenuCanvas,
             this.MenuBackgroundColor,
             this.MenuAutoLoad,
             this.MenuRemember,
             this.MenuDefColor,
-            this.MenuSkin});
+            this.MenuSkin,
+            this.colorsToolStripMenuItem});
             this.MenuSettings.Name = "MenuSettings";
             this.MenuSettings.Size = new System.Drawing.Size(74, 24);
             this.MenuSettings.Text = "&Settings";
             this.MenuSettings.DropDownOpening += new System.EventHandler(this.MenuSettings_DropDownOpening);
             // 
-            // MenuCanvasSize
+            // MenuCanvas
             // 
-            this.MenuCanvasSize.Image = global::Designer2.Properties.Resources.Size;
-            this.MenuCanvasSize.Name = "MenuCanvasSize";
-            this.MenuCanvasSize.Size = new System.Drawing.Size(247, 26);
-            this.MenuCanvasSize.Text = "&Canvas size...";
+            this.MenuCanvas.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pixelSizeToolStripMenuItem,
+            this.originPointToolStripMenuItem});
+            this.MenuCanvas.Image = global::Designer2.Properties.Resources.Size;
+            this.MenuCanvas.Name = "MenuCanvas";
+            this.MenuCanvas.Size = new System.Drawing.Size(247, 26);
+            this.MenuCanvas.Text = "&Canvas...";
+            // 
+            // pixelSizeToolStripMenuItem
+            // 
+            this.pixelSizeToolStripMenuItem.Name = "pixelSizeToolStripMenuItem";
+            this.pixelSizeToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.pixelSizeToolStripMenuItem.Text = "Pixel size...";
+            // 
+            // originPointToolStripMenuItem
+            // 
+            this.originPointToolStripMenuItem.Name = "originPointToolStripMenuItem";
+            this.originPointToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.originPointToolStripMenuItem.Text = "Origin point...";
             // 
             // MenuBackgroundColor
             // 
@@ -760,6 +791,34 @@
             this.MenuSkin.ToolTipText = "Name of used skin";
             this.MenuSkin.SelectedIndexChanged += new System.EventHandler(this.MenuSkin_SelectedIndexChanged);
             // 
+            // colorsToolStripMenuItem
+            // 
+            this.colorsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectedItemToolStripMenuItem,
+            this.specialPointToolStripMenuItem,
+            this.hotPointToolStripMenuItem});
+            this.colorsToolStripMenuItem.Name = "colorsToolStripMenuItem";
+            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
+            this.colorsToolStripMenuItem.Text = "Colors...";
+            // 
+            // selectedItemToolStripMenuItem
+            // 
+            this.selectedItemToolStripMenuItem.Name = "selectedItemToolStripMenuItem";
+            this.selectedItemToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.selectedItemToolStripMenuItem.Text = "Selected item...";
+            // 
+            // specialPointToolStripMenuItem
+            // 
+            this.specialPointToolStripMenuItem.Name = "specialPointToolStripMenuItem";
+            this.specialPointToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.specialPointToolStripMenuItem.Text = "Special point...";
+            // 
+            // hotPointToolStripMenuItem
+            // 
+            this.hotPointToolStripMenuItem.Name = "hotPointToolStripMenuItem";
+            this.hotPointToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.hotPointToolStripMenuItem.Text = "Hot point...";
+            // 
             // MenuInfo
             // 
             this.MenuInfo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -795,19 +854,50 @@
             this.MenuAbout.Text = "&About";
             this.MenuAbout.Click += new System.EventHandler(this.MenuAbout_Click);
             // 
-            // canvasPanel
+            // MenuCS
             // 
-            this.canvasPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.canvasPanel.AutoSize = true;
-            this.canvasPanel.BackColor = System.Drawing.Color.Black;
-            this.canvasPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.canvasPanel.Location = new System.Drawing.Point(12, 73);
-            this.canvasPanel.Name = "canvasPanel";
-            this.canvasPanel.Padding = new System.Windows.Forms.Padding(4);
-            this.canvasPanel.Size = new System.Drawing.Size(265, 376);
-            this.canvasPanel.TabIndex = 4;
+            this.MenuCS.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.MenuCS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Draw,
+            this.forceDraw,
+            this.toolPixSize,
+            this.toolOffsetX,
+            this.toolOffsetY});
+            this.MenuCS.Name = "contextMenuStrip1";
+            this.MenuCS.Size = new System.Drawing.Size(220, 142);
+            // 
+            // Draw
+            // 
+            this.Draw.Name = "Draw";
+            this.Draw.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.D)));
+            this.Draw.Size = new System.Drawing.Size(219, 24);
+            this.Draw.Text = "reDraw";
+            this.Draw.Click += new System.EventHandler(this.Draw_Click);
+            // 
+            // toolPixSize
+            // 
+            this.toolPixSize.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "4",
+            "8",
+            "15",
+            "32",
+            "64"});
+            this.toolPixSize.Name = "toolPixSize";
+            this.toolPixSize.Size = new System.Drawing.Size(121, 28);
+            this.toolPixSize.SelectedIndexChanged += new System.EventHandler(this.toolPixSize_SelectedIndexChanged);
+            // 
+            // toolOffsetX
+            // 
+            this.toolOffsetX.Name = "toolOffsetX";
+            this.toolOffsetX.Size = new System.Drawing.Size(100, 27);
+            // 
+            // toolOffsetY
+            // 
+            this.toolOffsetY.Name = "toolOffsetY";
+            this.toolOffsetY.Size = new System.Drawing.Size(100, 27);
             // 
             // tabControl1
             // 
@@ -846,6 +936,56 @@
             this.iconsTab.Size = new System.Drawing.Size(269, 348);
             this.iconsTab.TabIndex = 0;
             this.iconsTab.Text = "Icons";
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackgroundImage = global::Designer2.Properties.Resources.Down2;
+            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox5.Location = new System.Drawing.Point(2, 188);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox5.TabIndex = 12;
+            this.pictureBox5.TabStop = false;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.BackgroundImage = global::Designer2.Properties.Resources.Up2;
+            this.pictureBox4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox4.Location = new System.Drawing.Point(2, 148);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox4.TabIndex = 11;
+            this.pictureBox4.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackgroundImage = global::Designer2.Properties.Resources.Del;
+            this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox3.Location = new System.Drawing.Point(2, 94);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox3.TabIndex = 10;
+            this.pictureBox3.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackgroundImage = global::Designer2.Properties.Resources.Insert;
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox2.Location = new System.Drawing.Point(2, 42);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox2.TabIndex = 9;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = global::Designer2.Properties.Resources.Add1;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Location = new System.Drawing.Point(2, 2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox1.TabIndex = 8;
+            this.pictureBox1.TabStop = false;
             // 
             // labelAmount
             // 
@@ -954,6 +1094,36 @@
             this.itemsTab.TabIndex = 1;
             this.itemsTab.Text = "Items";
             // 
+            // pictureBox6
+            // 
+            this.pictureBox6.BackgroundImage = global::Designer2.Properties.Resources.Down2;
+            this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox6.Location = new System.Drawing.Point(6, 253);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox6.TabIndex = 25;
+            this.pictureBox6.TabStop = false;
+            // 
+            // pictureBox7
+            // 
+            this.pictureBox7.BackgroundImage = global::Designer2.Properties.Resources.Up2;
+            this.pictureBox7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox7.Location = new System.Drawing.Point(6, 213);
+            this.pictureBox7.Name = "pictureBox7";
+            this.pictureBox7.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox7.TabIndex = 24;
+            this.pictureBox7.TabStop = false;
+            // 
+            // pictureBox8
+            // 
+            this.pictureBox8.BackgroundImage = global::Designer2.Properties.Resources.Del;
+            this.pictureBox8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox8.Location = new System.Drawing.Point(6, 173);
+            this.pictureBox8.Name = "pictureBox8";
+            this.pictureBox8.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox8.TabIndex = 23;
+            this.pictureBox8.TabStop = false;
+            // 
             // textBoxName
             // 
             this.textBoxName.Location = new System.Drawing.Point(6, 5);
@@ -962,17 +1132,6 @@
             this.textBoxName.Size = new System.Drawing.Size(259, 22);
             this.textBoxName.TabIndex = 19;
             this.textBoxName.DoubleClick += new System.EventHandler(this.menuIconChangeName_Click);
-            // 
-            // comboBoxItems
-            // 
-            this.comboBoxItems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxItems.FormattingEnabled = true;
-            this.comboBoxItems.Location = new System.Drawing.Point(15, 20);
-            this.comboBoxItems.MaxDropDownItems = 16;
-            this.comboBoxItems.Name = "comboBoxItems";
-            this.comboBoxItems.Size = new System.Drawing.Size(158, 24);
-            this.comboBoxItems.TabIndex = 16;
-            this.comboBoxItems.TextChanged += new System.EventHandler(this.comboBoxItems_TextChanged);
             // 
             // labelAmountItem
             // 
@@ -1027,38 +1186,6 @@
             this.buttonDelItem.UseVisualStyleBackColor = true;
             this.buttonDelItem.Click += new System.EventHandler(this.MenuItemsDel_Click);
             // 
-            // buttonInsertItem
-            // 
-            this.buttonInsertItem.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonInsertItem.Location = new System.Drawing.Point(53, 92);
-            this.buttonInsertItem.Name = "buttonInsertItem";
-            this.buttonInsertItem.Size = new System.Drawing.Size(175, 34);
-            this.buttonInsertItem.TabIndex = 10;
-            this.buttonInsertItem.Text = "&Insert";
-            this.buttonInsertItem.UseVisualStyleBackColor = true;
-            this.buttonInsertItem.Click += new System.EventHandler(this.MenuItemsInsert_Click);
-            // 
-            // buttonAddItem
-            // 
-            this.buttonAddItem.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonAddItem.Location = new System.Drawing.Point(53, 50);
-            this.buttonAddItem.Name = "buttonAddItem";
-            this.buttonAddItem.Size = new System.Drawing.Size(175, 34);
-            this.buttonAddItem.TabIndex = 9;
-            this.buttonAddItem.Text = "&Add";
-            this.buttonAddItem.UseVisualStyleBackColor = true;
-            this.buttonAddItem.Click += new System.EventHandler(this.MenuItemsAdd_Click);
-            // 
-            // pictureBox
-            // 
-            this.pictureBox.InitialImage = null;
-            this.pictureBox.Location = new System.Drawing.Point(179, 19);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(49, 25);
-            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox.TabIndex = 18;
-            this.pictureBox.TabStop = false;
-            // 
             // listBoxItems
             // 
             this.listBoxItems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1071,6 +1198,84 @@
             this.listBoxItems.TabIndex = 8;
             this.listBoxItems.SelectedIndexChanged += new System.EventHandler(this.listBoxItems_SelectedIndexChanged);
             this.listBoxItems.DoubleClick += new System.EventHandler(this.listBoxItems_DoubleClick);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.pictureBox10);
+            this.groupBox1.Controls.Add(this.comboBoxItems);
+            this.groupBox1.Controls.Add(this.buttonAddItem);
+            this.groupBox1.Controls.Add(this.pictureBox9);
+            this.groupBox1.Controls.Add(this.pictureBox);
+            this.groupBox1.Controls.Add(this.buttonInsertItem);
+            this.groupBox1.Location = new System.Drawing.Point(9, 31);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(243, 136);
+            this.groupBox1.TabIndex = 26;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Adding items";
+            // 
+            // pictureBox10
+            // 
+            this.pictureBox10.BackgroundImage = global::Designer2.Properties.Resources.Add1;
+            this.pictureBox10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox10.Location = new System.Drawing.Point(15, 50);
+            this.pictureBox10.Name = "pictureBox10";
+            this.pictureBox10.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox10.TabIndex = 21;
+            this.pictureBox10.TabStop = false;
+            // 
+            // comboBoxItems
+            // 
+            this.comboBoxItems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxItems.FormattingEnabled = true;
+            this.comboBoxItems.Location = new System.Drawing.Point(15, 20);
+            this.comboBoxItems.MaxDropDownItems = 16;
+            this.comboBoxItems.Name = "comboBoxItems";
+            this.comboBoxItems.Size = new System.Drawing.Size(158, 24);
+            this.comboBoxItems.TabIndex = 16;
+            this.comboBoxItems.TextChanged += new System.EventHandler(this.comboBoxItems_TextChanged);
+            // 
+            // buttonAddItem
+            // 
+            this.buttonAddItem.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonAddItem.Location = new System.Drawing.Point(53, 50);
+            this.buttonAddItem.Name = "buttonAddItem";
+            this.buttonAddItem.Size = new System.Drawing.Size(175, 34);
+            this.buttonAddItem.TabIndex = 9;
+            this.buttonAddItem.Text = "&Add";
+            this.buttonAddItem.UseVisualStyleBackColor = true;
+            this.buttonAddItem.Click += new System.EventHandler(this.MenuItemsAdd_Click);
+            // 
+            // pictureBox9
+            // 
+            this.pictureBox9.BackgroundImage = global::Designer2.Properties.Resources.Insert;
+            this.pictureBox9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox9.Location = new System.Drawing.Point(15, 92);
+            this.pictureBox9.Name = "pictureBox9";
+            this.pictureBox9.Size = new System.Drawing.Size(32, 34);
+            this.pictureBox9.TabIndex = 22;
+            this.pictureBox9.TabStop = false;
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.InitialImage = null;
+            this.pictureBox.Location = new System.Drawing.Point(179, 19);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(49, 25);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox.TabIndex = 18;
+            this.pictureBox.TabStop = false;
+            // 
+            // buttonInsertItem
+            // 
+            this.buttonInsertItem.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonInsertItem.Location = new System.Drawing.Point(53, 92);
+            this.buttonInsertItem.Name = "buttonInsertItem";
+            this.buttonInsertItem.Size = new System.Drawing.Size(175, 34);
+            this.buttonInsertItem.TabIndex = 10;
+            this.buttonInsertItem.Text = "&Insert";
+            this.buttonInsertItem.UseVisualStyleBackColor = true;
+            this.buttonInsertItem.Click += new System.EventHandler(this.MenuItemsInsert_Click);
             // 
             // propertyTab
             // 
@@ -1110,120 +1315,32 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // pictureBox1
+            // vBar1
             // 
-            this.pictureBox1.BackgroundImage = global::Designer2.Properties.Resources.Add1;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox1.Location = new System.Drawing.Point(2, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox1.TabIndex = 8;
-            this.pictureBox1.TabStop = false;
+            this.vBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.vBar1.Location = new System.Drawing.Point(253, 101);
+            this.vBar1.Maximum = 382;
+            this.vBar1.Name = "vBar1";
+            this.vBar1.Size = new System.Drawing.Size(23, 323);
+            this.vBar1.TabIndex = 6;
             // 
-            // pictureBox2
+            // hBar1
             // 
-            this.pictureBox2.BackgroundImage = global::Designer2.Properties.Resources.Insert;
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox2.Location = new System.Drawing.Point(2, 42);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox2.TabIndex = 9;
-            this.pictureBox2.TabStop = false;
+            this.hBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.hBar1.Location = new System.Drawing.Point(42, 427);
+            this.hBar1.Maximum = 382;
+            this.hBar1.Name = "hBar1";
+            this.hBar1.Size = new System.Drawing.Size(208, 22);
+            this.hBar1.TabIndex = 7;
             // 
-            // pictureBox3
+            // forceDraw
             // 
-            this.pictureBox3.BackgroundImage = global::Designer2.Properties.Resources.Del;
-            this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox3.Location = new System.Drawing.Point(2, 94);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox3.TabIndex = 10;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.BackgroundImage = global::Designer2.Properties.Resources.Up2;
-            this.pictureBox4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox4.Location = new System.Drawing.Point(2, 148);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox4.TabIndex = 11;
-            this.pictureBox4.TabStop = false;
-            // 
-            // pictureBox5
-            // 
-            this.pictureBox5.BackgroundImage = global::Designer2.Properties.Resources.Down2;
-            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox5.Location = new System.Drawing.Point(2, 188);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox5.TabIndex = 12;
-            this.pictureBox5.TabStop = false;
-            // 
-            // pictureBox6
-            // 
-            this.pictureBox6.BackgroundImage = global::Designer2.Properties.Resources.Down2;
-            this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox6.Location = new System.Drawing.Point(6, 253);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox6.TabIndex = 25;
-            this.pictureBox6.TabStop = false;
-            // 
-            // pictureBox7
-            // 
-            this.pictureBox7.BackgroundImage = global::Designer2.Properties.Resources.Up2;
-            this.pictureBox7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox7.Location = new System.Drawing.Point(6, 213);
-            this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox7.TabIndex = 24;
-            this.pictureBox7.TabStop = false;
-            // 
-            // pictureBox8
-            // 
-            this.pictureBox8.BackgroundImage = global::Designer2.Properties.Resources.Del;
-            this.pictureBox8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox8.Location = new System.Drawing.Point(6, 173);
-            this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox8.TabIndex = 23;
-            this.pictureBox8.TabStop = false;
-            // 
-            // pictureBox9
-            // 
-            this.pictureBox9.BackgroundImage = global::Designer2.Properties.Resources.Insert;
-            this.pictureBox9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox9.Location = new System.Drawing.Point(15, 92);
-            this.pictureBox9.Name = "pictureBox9";
-            this.pictureBox9.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox9.TabIndex = 22;
-            this.pictureBox9.TabStop = false;
-            // 
-            // pictureBox10
-            // 
-            this.pictureBox10.BackgroundImage = global::Designer2.Properties.Resources.Add1;
-            this.pictureBox10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox10.Location = new System.Drawing.Point(15, 50);
-            this.pictureBox10.Name = "pictureBox10";
-            this.pictureBox10.Size = new System.Drawing.Size(32, 34);
-            this.pictureBox10.TabIndex = 21;
-            this.pictureBox10.TabStop = false;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.pictureBox10);
-            this.groupBox1.Controls.Add(this.comboBoxItems);
-            this.groupBox1.Controls.Add(this.buttonAddItem);
-            this.groupBox1.Controls.Add(this.pictureBox9);
-            this.groupBox1.Controls.Add(this.pictureBox);
-            this.groupBox1.Controls.Add(this.buttonInsertItem);
-            this.groupBox1.Location = new System.Drawing.Point(9, 31);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(243, 136);
-            this.groupBox1.TabIndex = 26;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Adding items";
+            this.forceDraw.Name = "forceDraw";
+            this.forceDraw.Size = new System.Drawing.Size(219, 24);
+            this.forceDraw.Text = "force Draw";
+            this.forceDraw.Click += new System.EventHandler(this.forceDraw_Click);
             // 
             // FormMain
             // 
@@ -1232,8 +1349,9 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(568, 478);
+            this.Controls.Add(this.hBar1);
+            this.Controls.Add(this.vBar1);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.canvasPanel);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
@@ -1252,24 +1370,26 @@
             this.toolStrip.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.MenuCS.ResumeLayout(false);
+            this.MenuCS.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.iconsTab.ResumeLayout(false);
             this.iconsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.itemsTab.ResumeLayout(false);
             this.itemsTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.propertyTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            this.propertyTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1282,7 +1402,6 @@
         private System.Windows.Forms.ToolStripMenuItem MenuFile;
         private System.Windows.Forms.ToolStripMenuItem MenuEnd;
         private System.Windows.Forms.ToolStripButton toolEnd;
-        private System.Windows.Forms.Panel canvasPanel;
         private System.Windows.Forms.ToolStripMenuItem MenuItems;
         private System.Windows.Forms.ToolStripMenuItem MenuClear;
         private System.Windows.Forms.ToolStripMenuItem MenuPaste;
@@ -1310,7 +1429,7 @@
         private System.Windows.Forms.ToolStripMenuItem MenuIconsMoveDown;
         private System.Windows.Forms.ToolStripSeparator toolSeparator6;
         private System.Windows.Forms.ToolStripMenuItem MenuIconsPreview;
-        private System.Windows.Forms.ToolStripMenuItem MenuCanvasSize;
+        private System.Windows.Forms.ToolStripMenuItem MenuCanvas;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage iconsTab;
         private System.Windows.Forms.TabPage itemsTab;
@@ -1389,6 +1508,20 @@
         private System.Windows.Forms.PictureBox pictureBox9;
         private System.Windows.Forms.PictureBox pictureBox10;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ContextMenuStrip MenuCS;
+        private System.Windows.Forms.ToolStripMenuItem Draw;
+        private System.Windows.Forms.ToolStripMenuItem colorsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pixelSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem originPointToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedItemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem specialPointToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hotPointToolStripMenuItem;
+        private System.Windows.Forms.VScrollBar vBar1;
+        private System.Windows.Forms.HScrollBar hBar1;
+        private System.Windows.Forms.ToolStripComboBox toolPixSize;
+        private System.Windows.Forms.ToolStripTextBox toolOffsetX;
+        private System.Windows.Forms.ToolStripTextBox toolOffsetY;
+        private System.Windows.Forms.ToolStripMenuItem forceDraw;
     }
 }
 

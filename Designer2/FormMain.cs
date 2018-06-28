@@ -15,6 +15,7 @@ namespace Designer2
     public partial class FormMain : Form
     {
         public ICOlist icons = new ICOlist();
+        public ICOdraw ICOpanel = new ICOdraw();
         private string pathToFile = "";
         private Setting setting;
         private ToolStripMenuItem[] tabTS = new ToolStripMenuItem[10];
@@ -77,6 +78,8 @@ namespace Designer2
             MenuSkin.Items.AddRange(Enum.GetNames(typeof(eSkin)));
             MenuSkin.SelectedIndex = (int)color.Skin;
 
+            this.Controls.AddRange(ICOpanel.loadItem(MenuCS).ToArray());
+
             setting = new Setting(@"Setting.txt");
 
             if (setting.read() == false)
@@ -90,7 +93,7 @@ namespace Designer2
                 setting.clearFile();
                 saveSettings();
             }
-            canvasPanel.BackColor = setting.bgColor;
+            ICOpanel.backGround = setting.bgColor;
             recentFileUpdate();
             autoLoadUpDate();
             windowSaveUpdate();
@@ -101,7 +104,7 @@ namespace Designer2
         //---
         private void saveSettings()
         {
-            setting.bgColor = canvasPanel.BackColor;
+            setting.bgColor = ICOpanel.backGround;
             setting.autoLoad = MenuAutoLoad.Checked;
             setting.windowSize = this.Size;
             setting.windowLocation = this.Location;
@@ -582,11 +585,11 @@ namespace Designer2
 
         private void MenuBackgroundColor_Click(object sender, EventArgs e)
         {
-            colorDialog1.Color = canvasPanel.BackColor;
+            colorDialog1.Color = ICOpanel.backGround;
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
                 setting.bgColor = colorDialog1.Color;
-                canvasPanel.BackColor = setting.bgColor;
+                ICOpanel.backGround = setting.bgColor;
             }
         }
 
@@ -739,7 +742,7 @@ namespace Designer2
         //---
         private void bgColorChange()
         {
-            canvasPanel.BackColor = setting.bgColor;
+            ICOpanel.backGround = setting.bgColor;
         }
 
         //---
@@ -1201,6 +1204,46 @@ namespace Designer2
         private void propertyTab_ControlAdded(object sender, ControlEventArgs e)
         {
             propertyTab_Resize(sender, e);
+        }
+
+        //---
+        private void Draw_Click(object sender, EventArgs e)
+        {
+            if (listBoxIcons.SelectedIndex == -1)
+            {
+                return;
+            }
+            Basis b = icons[listBoxIcons.SelectedIndex].draw(listBoxItems.SelectedIndex, color.Default);
+            if (listBoxItems.SelectedIndex == -1)
+            {
+                return;
+            }
+            ICOpanel.draw(b);
+            icons[listBoxIcons.SelectedIndex].painted();
+        }
+
+        //---
+
+        private void toolPixSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ICOpanel.pixSize = float.Parse(toolPixSize.Items[toolPixSize.SelectedIndex].ToString());
+        }
+
+        //---
+        private void forceDraw_Click(object sender, EventArgs e)
+        {
+            if (listBoxIcons.SelectedIndex == -1)
+            {
+                return;
+            }
+            Basis b = icons[listBoxIcons.SelectedIndex].draw(listBoxItems.SelectedIndex, color.Default);
+            if (listBoxItems.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            ICOpanel.draw(b, true);
+            icons[listBoxIcons.SelectedIndex].painted();
         }
     }
 }

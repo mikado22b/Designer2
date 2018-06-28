@@ -67,7 +67,9 @@ namespace Designer2
         //---
         protected void drawPixel(ref Basis canva, int x, int y, eColor cl, int tag)
         {
-            if (x < 0 || y < 0 || x >= Basis.dim || y >= Basis.dim) return;
+            if (x < -127 || y < -127 || x >= 127 + 127 || y >= 127 + 127) return;
+            x += 127;
+            y += 127;
             canva[x, y].color = cl;
             canva[x, y].add(tag);
         }
@@ -110,7 +112,6 @@ namespace Designer2
                 dy = y1 - y2;
             }
             drawPixel(ref canva, x, y, cl, tag);
-            // canva[x, y].color = cl;
 
             if (dx > dy)
             {
@@ -132,7 +133,6 @@ namespace Designer2
                         x += xi;
 
                         drawPixel(ref canva, x, y, cl, tag);
-                        // canva[x, y].color = cl;
                     }
                 }
             }
@@ -156,9 +156,20 @@ namespace Designer2
                         y += yi;
                     }
                     drawPixel(ref canva, x, y, cl, tag);
-                    //canva[x, y].color = cl;
                 }
             }
+        }
+
+        //---
+        protected void drawHline(ref Basis canva, int x1, int y1, int width, eColor cl, int tag)
+        {
+            drawLine(ref canva, x1, y1, x1 + width - 1, y1, cl, tag);
+        }
+
+        //---
+        protected void drawVline(ref Basis canva, int x1, int y1, int height, eColor cl, int tag)
+        {
+            drawLine(ref canva, x1, y1, x1, y1 + height - 1, cl, tag);
         }
 
         //---
@@ -231,16 +242,25 @@ namespace Designer2
                 x++;
                 ddF_x += 2;
                 f += ddF_x;
+                /*
+                drawFastVLine(x0 + x, y0 - r, r + r + delta, color);
+                drawFastVLine(x0 + r, y0 - x, x + x + delta, color);
+            }
+            if (cornername & 0x2)
+            {
+                drawFastVLine(x0 - x, y0 - r, r + r + delta, color);
+                drawFastVLine(x0 - r, y0 - x, x + x + delta, color);
+                */
 
                 if ((cornername & 0x1) == 1)
                 {
-                    drawLine(ref canva, x0 + x, y0 - r, (x0 + x) + r + r + delta, y0 - r, cl, tag);
-                    drawLine(ref canva, x0 + r, y0 - x, (x0 + r) + x + x + delta, y0 - x, cl, tag);
+                    drawVline(ref canva, x0 + x, y0 - r, r + r + delta, cl, tag);
+                    drawVline(ref canva, x0 + r, y0 - x, x + x + delta, cl, tag);
                 }
                 if ((cornername & 0x2) == 2)
                 {
-                    drawLine(ref canva, x0 - x, y0 - r, (x0 - x) + r + r + delta, y0 - r, cl, tag);
-                    drawLine(ref canva, x0 - r, y0 - x, (x0 - r) + x + x + delta, y0 - x, cl, tag);
+                    drawVline(ref canva, x0 - x, y0 - r, r + r + delta, cl, tag);
+                    drawVline(ref canva, x0 - r, y0 - x, x + x + delta, cl, tag);
                 }
             }
         }
@@ -1803,30 +1823,31 @@ namespace Designer2
         //---
         public override eColor draw(ref Basis canva, eColor cl, int tag)
         {
+            int rad = r;
             int x0 = c.X;
             int y0 = c.Y;
             if (fill)
             {
-                drawLine(ref canva, x0, y0 - r, x0, y0 - r + r + r + 1, cl, tag);
+                drawVline(ref canva, x0, y0 - r, r + r + 1, cl, tag);
                 fillCircleHelper(ref canva, x0, y0, r, 3, 0, cl, tag);
             }
             else
             {
-                int f = 1 - r;
+                int f = 1 - rad;
                 int ddF_x = 1;
-                int ddF_y = -r - r;
+                int ddF_y = -rad - rad;
                 int x = 0;
 
-                drawPixel(ref canva, x0, y0 + r, cl, tag);
-                drawPixel(ref canva, x0, y0 - r, cl, tag);
-                drawPixel(ref canva, x0 + r, y0, cl, tag);
-                drawPixel(ref canva, x0 - r, y0, cl, tag);
+                drawPixel(ref canva, x0, y0 + rad, cl, tag);
+                drawPixel(ref canva, x0, y0 - rad, cl, tag);
+                drawPixel(ref canva, x0 + rad, y0, cl, tag);
+                drawPixel(ref canva, x0 - rad, y0, cl, tag);
 
-                while (x < r)
+                while (x < rad)
                 {
                     if (f >= 0)
                     {
-                        r--;
+                        rad--;
                         ddF_y += 2;
                         f += ddF_y;
                     }
@@ -1834,23 +1855,20 @@ namespace Designer2
                     ddF_x += 2;
                     f += ddF_x;
 
-                    drawPixel(ref canva, x0 + x, y0 + r, cl, tag);
-                    drawPixel(ref canva, x0 - x, y0 + r, cl, tag);
-                    drawPixel(ref canva, x0 + x, y0 - r, cl, tag);
-                    drawPixel(ref canva, x0 - x, y0 - r, cl, tag);
-                    drawPixel(ref canva, x0 + r, y0 + x, cl, tag);
-                    drawPixel(ref canva, x0 - r, y0 + x, cl, tag);
-                    drawPixel(ref canva, x0 + r, y0 - x, cl, tag);
-                    drawPixel(ref canva, x0 - r, y0 - x, cl, tag);
+                    drawPixel(ref canva, x0 + x, y0 + rad, cl, tag);
+                    drawPixel(ref canva, x0 - x, y0 + rad, cl, tag);
+                    drawPixel(ref canva, x0 + x, y0 - rad, cl, tag);
+                    drawPixel(ref canva, x0 - x, y0 - rad, cl, tag);
+                    drawPixel(ref canva, x0 + rad, y0 + x, cl, tag);
+                    drawPixel(ref canva, x0 - rad, y0 + x, cl, tag);
+                    drawPixel(ref canva, x0 + rad, y0 - x, cl, tag);
+                    drawPixel(ref canva, x0 - rad, y0 - x, cl, tag);
                 }
             }
             if (cl == eColor.Selected)
             {
                 drawPixel(ref canva, c.X, c.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, c.X - r, c.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, c.X, c.Y - r, eColor.SelectedPoint, tag);
                 drawPixel(ref canva, c.X + r, c.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, c.X, c.Y + r, eColor.SelectedPoint, tag);
             }
 
             return cl;
@@ -1859,7 +1877,7 @@ namespace Designer2
         //---
         public override Rectangle getRect()
         {
-            return new Rectangle(c.X - r, c.Y - r, r * 2, r * 2);
+            return new Rectangle(c.X - r, c.Y - r, r * 2 + 1, r * 2 + 1);
         }
 
         //---
@@ -2268,12 +2286,13 @@ namespace Designer2
         //---
         public override eColor draw(ref Basis canva, eColor cl, int tag)
         {
+            if (rx < 2) return cl;
+            if (ry < 2) return cl;
+
             int x0 = c.X;
             int y0 = c.Y;
             if (fill)
             {
-                if (rx < 2) return cl;
-                if (ry < 2) return cl;
                 int x, y;
                 int rx2 = rx * rx;
                 int ry2 = ry * ry;
@@ -2283,8 +2302,8 @@ namespace Designer2
 
                 for (x = 0, y = ry, s = 2 * ry2 + rx2 * (1 - 2 * ry); ry2 * x <= rx2 * y; x++)
                 {
-                    drawLine(ref canva, x0 - x, y0 - y, (x0 - x) + x + x + 1, y0 - y, cl, tag);
-                    drawLine(ref canva, x0 - x, y0 + y, (x0 - x) + x + x + 1, y0 - y, cl, tag);
+                    drawHline(ref canva, x0 - x, y0 - y, x + x + 1, cl, tag);
+                    drawHline(ref canva, x0 - x, y0 + y, x + x + 1, cl, tag);
 
                     if (s >= 0)
                     {
@@ -2296,8 +2315,8 @@ namespace Designer2
 
                 for (x = rx, y = 0, s = 2 * rx2 + ry2 * (1 - 2 * rx); rx2 * y <= ry2 * x; y++)
                 {
-                    drawLine(ref canva, x0 - x, y0 - y, (x0 - x) + x + x + 1, y0 - y, cl, tag);
-                    drawLine(ref canva, x0 - x, y0 + y, (x0 - x) + x + x + 1, y0 + y, cl, tag);
+                    drawHline(ref canva, x0 - x, y0 - y, x + x + 1, cl, tag);
+                    drawHline(ref canva, x0 - x, y0 + y, x + x + 1, cl, tag);
 
                     if (s >= 0)
                     {
@@ -2309,8 +2328,6 @@ namespace Designer2
             }
             else
             {
-                if (rx < 2) return cl;
-                if (ry < 2) return cl;
                 int x, y;
                 int rx2 = rx * rx;
                 int ry2 = ry * ry;
@@ -2349,8 +2366,6 @@ namespace Designer2
             if (cl == eColor.Selected)
             {
                 drawPixel(ref canva, c.X, c.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, c.X - rx, c.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, c.X, c.Y - ry, eColor.SelectedPoint, tag);
                 drawPixel(ref canva, c.X + rx, c.Y, eColor.SelectedPoint, tag);
                 drawPixel(ref canva, c.X, c.Y + ry, eColor.SelectedPoint, tag);
             }
@@ -2361,7 +2376,7 @@ namespace Designer2
         //---
         public override Rectangle getRect()
         {
-            return new Rectangle(c.X - rx, c.Y - ry, rx * 2, ry * 2);
+            return new Rectangle(c.X - rx, c.Y - ry, rx * 2 + 1, ry * 2 + 1);
         }
 
         //---
@@ -2862,7 +2877,7 @@ namespace Designer2
                 drawLine(ref canva, lPt[2], lPt[0], cl, tag);
             }
 
-            if (cl == eColor.SelectedPoint)
+            if (cl == eColor.Selected)
             {
                 for (int i = 0; i < 3; i++)
                 {
@@ -3229,7 +3244,7 @@ namespace Designer2
                 if (lPt[i].Y > max.Y) max.Y = lPt[i].Y;
             }
 
-            return new Rectangle(min.X, min.Y, max.X - min.X, max.Y - min.Y);
+            return new Rectangle(min.X, min.Y, max.X - min.X + 1, max.Y - min.Y + 1);
         }
 
         //---
@@ -3258,7 +3273,7 @@ namespace Designer2
             {
                 ts.Add(new errClass(eTest.errTrDupPoint,
                     new int[2] { 0, 1 },
-                    "Triangle" + this.getName() + ": Points A & B have the same coordinates."));
+                    "Triangle" + this.getName() + ": Vertices A & B have the same coordinates."));
                 return ts;
             }
 
@@ -3266,7 +3281,7 @@ namespace Designer2
             {
                 ts.Add(new errClass(eTest.errTrDupPoint,
                     new int[2] { 1, 2 },
-                    "Triangle" + this.getName() + ": Points B & C have the same coordinates."));
+                    "Triangle" + this.getName() + ": Vertices B & C have the same coordinates."));
                 return ts;
             }
 
@@ -3274,7 +3289,7 @@ namespace Designer2
             {
                 ts.Add(new errClass(eTest.errTrDupPoint,
                     new int[2] { 0, 2 },
-                    "Triangle" + this.getName() + ": Points A & C have the same coordinates."));
+                    "Triangle" + this.getName() + ": Vertices A & C have the same coordinates."));
                 return ts;
             }
 
@@ -3431,7 +3446,7 @@ namespace Designer2
             name.Nodes[1].SelectedImageIndex = (int)eImage.iYpos;
 
             name.Nodes.Add("Width= " + r.Width);
-            if (r.Width > 0)
+            if (r.Width > 1)
             {
                 name.Nodes[2].ImageIndex = (int)eImage.iWidth;
                 name.Nodes[2].SelectedImageIndex = (int)eImage.iWidth;
@@ -3442,7 +3457,7 @@ namespace Designer2
                 name.Nodes[2].SelectedImageIndex = (int)eImage.iWidthWar;
             }
             name.Nodes.Add("Height= " + r.Height);
-            if (r.Height > 0)
+            if (r.Height > 1)
             {
                 name.Nodes[3].ImageIndex = (int)eImage.iHeight;
                 name.Nodes[3].SelectedImageIndex = (int)eImage.iHeight;
@@ -3481,24 +3496,26 @@ namespace Designer2
         //---
         public override eColor draw(ref Basis canva, eColor cl, int tag)
         {
-            drawLine(ref canva, r.X, r.Y, r.X + r.Width, r.Y, cl, tag);
-            drawLine(ref canva, r.X, r.Y + r.Height - 1, r.X + r.Width, r.Y, cl, tag);
-            drawLine(ref canva, r.X, r.Y, r.X, r.Y + r.Height, cl, tag);
-            drawLine(ref canva, r.X + r.Width - 1, r.Y, r.X, r.Y + r.Height, cl, tag);
+            if (r.Width == 0 || r.Height == 0) return cl;
             if (fill)
             {
-                for (int i = 1; i < r.Height - 1 + 1; i++)
+                for (int i = 0; i < r.Height; i++)
                 {
-                    drawLine(ref canva, r.X, r.Y, r.X + r.Width - 1, r.Y + i, cl, tag);
+                    drawHline(ref canva, r.X, r.Y + i, r.Width, cl, tag);
                 }
+            }
+            else
+            {
+                drawHline(ref canva, r.X, r.Y, r.Width, cl, tag);
+                drawHline(ref canva, r.X, r.Y + r.Height - 1, r.Width, cl, tag);
+                drawVline(ref canva, r.X, r.Y, r.Height, cl, tag);
+                drawVline(ref canva, r.X + r.Width - 1, r.Y, r.Height, cl, tag);
             }
 
             if (cl == eColor.Selected)
             {
                 drawPixel(ref canva, r.X, r.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, r.X + r.Width, r.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, r.X, r.Y + r.Height, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, r.X + r.Width, r.Y + r.Height, eColor.SelectedPoint, tag);
+                drawPixel(ref canva, r.X + r.Width - 1, r.Y + r.Height - 1, eColor.SelectedPoint, tag);
             }
 
             return cl;
@@ -3576,6 +3593,8 @@ namespace Designer2
             h.Text = "H=";
             w.Text = "W=";
 
+            nudh.Minimum = 1;
+            nudw.Minimum = 1;
             nudh.ValueChanged += new EventHandler(valueHchange);
             nudw.ValueChanged += new EventHandler(valueWchange);
             shrh.Click += new EventHandler(valueHchange);
@@ -3685,12 +3704,13 @@ namespace Designer2
             {
                 if ((eDirection)((sender as Button).Tag) == eDirection.iLeft)
                 {
-                    if (r.Width == MIN)
+                    if (r.Width <= 1)
                     {
-                        MessageBox.Show("W=0 is the minimum value.",
+                        MessageBox.Show("W=1 is the minimum value.",
                                          "Warning.",
                                           MessageBoxButtons.OK,
                                           MessageBoxIcon.Warning);
+                        r.Width = 1;
                         return;
                     }
                     else r.Width--;
@@ -3723,12 +3743,13 @@ namespace Designer2
             {
                 if ((eDirection)((sender as Button).Tag) == eDirection.iUp)
                 {
-                    if (r.Height == MIN)
+                    if (r.Height <= 1)
                     {
-                        MessageBox.Show("H=0 is the minimum value.",
+                        MessageBox.Show("H=1 is the minimum value.",
                                          "Warning.",
                                           MessageBoxButtons.OK,
                                           MessageBoxIcon.Warning);
+                        r.Height = 1;
                     }
                     else r.Height--;
                 }
@@ -3778,25 +3799,25 @@ namespace Designer2
         public override List<errClass> test()
         {
             List<errClass> ts = new List<errClass>();
-            if (r.Width == 0 && r.Height == 0)
+            if (r.Width == 1 && r.Height == 1)
             {
                 ts.Add(new errClass(eTest.errRecRedToPoint,
                     new int[0] { },
-                    "Rectangle" + this.getName() + ": Reduced to point."));
+                    "Rectangle" + this.getName() + ": Width & Height =1. Painted only point."));
                 return ts;
             }
-            if (r.Width == 0)
+            if (r.Width == 1)
             {
                 ts.Add(new errClass(eTest.errRecWidth,
                     new int[0],
-                    "Rectangle" + this.getName() + ": Width =0."));
+                    "Rectangle" + this.getName() + ": Width =1. Painted line."));
                 return ts;
             }
-            if (r.Height == 0)
+            if (r.Height == 1)
             {
                 ts.Add(new errClass(eTest.errRecHeight,
                     new int[0],
-                  "Rectangle" + this.getName() + ": Height =0."));
+                  "Rectangle" + this.getName() + ": Height =1. Painted line."));
                 return ts;
             }
             return ts;
@@ -3977,7 +3998,7 @@ namespace Designer2
             {
                 for (int i = 0; i < rec.Height; i++)
                 {
-                    drawLine(ref canva, rec.X, rec.Y + i, rec.X + rec.Width, rec.Y + i, cl, tag);
+                    drawLine(ref canva, rec.X + r, rec.Y + i, rec.X + rec.Width - r, rec.Y + i, cl, tag);
                 }
 
                 // drarec.Width four corners
@@ -3986,39 +4007,23 @@ namespace Designer2
             }
             else
             {
-                drawLine(ref canva,
-                    rec.X + r, rec.Y, rec.X + r + rec.Width - r - r, rec.Y,
-                    cl, tag); // Top
-                drawLine(ref canva,
-                    rec.X + r, rec.Y + rec.Height - 1, rec.X + r + rec.Width - r - r, rec.Y + rec.Height - 1,
-                    cl, tag); // Bottom
-                drawLine(ref canva,
-                    rec.X, rec.Y + r, rec.X, rec.Y + r + rec.Height - r - r,
-                    cl, tag); // Left
-                drawLine(ref canva,
-                    rec.X + rec.Width - 1, rec.Y + r, rec.X + rec.Width - 1, rec.Y + r + rec.Height - r - r,
-                    cl, tag); // Right
-                              // draw four corners
-                drawCircleHelper(ref canva,
-                    rec.X + r, rec.Y + r, r, (eQuarter)1,
-                    cl, tag);
-                drawCircleHelper(ref canva,
-                    rec.X + rec.Width - r - 1, rec.Y + r, r, (eQuarter)2,
-                    cl, tag);
-                drawCircleHelper(ref canva,
-                    rec.X + rec.Width - r - 1, rec.Y + rec.Height - r - 1, r, (eQuarter)4,
-                    cl, tag);
-                drawCircleHelper(ref canva,
-                    rec.X + r, rec.Y + rec.Height - r - 1, r, (eQuarter)8,
-                    cl, tag);
+                drawHline(ref canva, rec.X + r, rec.Y, rec.Width - r - r, cl, tag); // Top
+                drawHline(ref canva, rec.X + r, rec.Y + rec.Height - 1, rec.Width - r - r, cl, tag); // Bottom
+                drawVline(ref canva, rec.X, rec.Y + r, rec.Height - r - r, cl, tag); // Left
+                drawVline(ref canva, rec.X + rec.Width - 1, rec.Y + r, rec.Height - r - r, cl, tag); // Right
+                                                                                                     // draw
+                                                                                                     // four corners
+                drawCircleHelper(ref canva, rec.X + r, rec.Y + r, r, eQuarter.qUL, cl, tag);
+                drawCircleHelper(ref canva, rec.X + rec.Width - r - 1, rec.Y + r, r, eQuarter.qUR, cl, tag);
+                drawCircleHelper(ref canva, rec.X + rec.Width - r - 1, rec.Y + rec.Height - r - 1, r, eQuarter.qDR, cl, tag);
+                drawCircleHelper(ref canva, rec.X + r, rec.Y + rec.Height - r - 1, r, eQuarter.qDL, cl, tag);
             }
 
             if (cl == eColor.Selected)
             {
+                drawPixel(ref canva, rec.X + r, rec.Y, eColor.SelectedPoint, tag);
                 drawPixel(ref canva, rec.X, rec.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, rec.X + rec.Width, rec.Y, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, rec.X, rec.Y + rec.Height, eColor.SelectedPoint, tag);
-                drawPixel(ref canva, rec.X + rec.Width, rec.Y + rec.Height, eColor.SelectedPoint, tag);
+                drawPixel(ref canva, rec.X + rec.Width - 1, rec.Y + rec.Height - 1, eColor.SelectedPoint, tag);
             }
 
             return cl;
@@ -4459,7 +4464,7 @@ namespace Designer2
         //---
         protected Point c;
 
-        protected List<Point> lPt;
+        //protected List<Point> lPt;
 
         protected byte r;
         protected bool fill;
@@ -4483,7 +4488,7 @@ namespace Designer2
             r = 1;
             side = 3;
             angle = 0;
-            lPt = getPoint();
+            //lPt = getPoint();
             nudx = new NumericUpDown();
             nudy = new NumericUpDown();
             nudr = new NumericUpDown();
@@ -4498,11 +4503,11 @@ namespace Designer2
         protected List<Point> getPoint()
         {
             List<Point> l = new List<Point>();
-
+            int step = 360 / side;
             for (int i = 0; i < side; i++)
             {
-                int x = (int)(-r * Math.Cos((double)angle / 180 * Math.PI));
-                int y = (int)(-r * Math.Sin((double)angle / 180 * Math.PI));
+                int x = (int)(-r * Math.Cos((step * i + angle) / 180.0 * Math.PI));
+                int y = (int)(-r * Math.Sin((step * i + angle) / 180.0 * Math.PI));
                 l.Add(new Point(x + c.X, y + c.Y));
             }
 
@@ -4590,9 +4595,11 @@ namespace Designer2
         //---
         public override eColor draw(ref Basis canva, eColor cl, int tag)
         {
+            List<Point> lPt = new List<Point>();
+            lPt.AddRange(getPoint());
             if (fill)
             {
-                for (int i = 0; i < lPt.Count - 1; i++)
+                for (int i = 0; i < side - 1; i++)
                 {
                     fillTriangle(ref canva, c, lPt[i], lPt[i + 1], cl, tag);
                 }
@@ -4600,7 +4607,7 @@ namespace Designer2
             }
             else
             {
-                for (int i = 0; i < lPt.Count - 1; i++)
+                for (int i = 0; i < side - 1; i++)
                 {
                     drawLine(ref canva, lPt[i], lPt[i + 1], cl, tag);
                 }
@@ -4609,7 +4616,7 @@ namespace Designer2
             if (cl == eColor.Selected)
             {
                 drawPixel(ref canva, c.X, c.Y, eColor.SelectedPoint, tag);
-                for (int i = 0; i < lPt.Count; i++)
+                for (int i = 0; i < side; i++)
                 {
                     drawPixel(ref canva, lPt[i].X, lPt[i].Y, eColor.SelectedPoint, tag);
                 }
@@ -4621,6 +4628,8 @@ namespace Designer2
         //---
         public override Rectangle getRect()
         {
+            List<Point> lPt = new List<Point>();
+            lPt.AddRange(getPoint());
             Point min = lPt[0];
             Point max = lPt[0];
             for (int i = 1; i < lPt.Count; i++)
@@ -4694,186 +4703,70 @@ namespace Designer2
             tab.Add(pbc);
 
             Label ra = new Label();
-            ra.Text = "R=";
-            ra.Top = ly.Top + ly.Height + il * 5;
-            ra.Left = il;
-            ra.Width = lx.Width;
-            tab.Add(ra);
-
-            Label ls = new Label();
-            ls.Text = "Sides";
-            ls.Top = ra.Top + ra.Height + il;
-            ls.Left = il;
-            ls.Width = lx.Width;
-            tab.Add(ls);
-
-            Label lang = new Label();
-            lang.Text = "Angle";
-            lang.Top = ls.Top + ls.Height + il;
-            lang.Left = il;
-            lang.Width = lx.Width;
-            tab.Add(lang);
-
             nudr = new NumericUpDown();
-            nudr.Top = ra.Top - 3;
-            nudr.Left = ra.Width + il;
-            nudr.Width = nudx.Width;
-            nudr.Minimum = 1;
-            nudr.Maximum = nudx.Maximum;
-            nudr.Value = r;
-            nudr.ValueChanged += new EventHandler(valueRchange);
-            tab.Add(nudr);
-
-            nudsid = new NumericUpDown();
-            nudsid.Top = ls.Top - 3;
-            nudsid.Left = ls.Width + il;
-            nudsid.Width = nudx.Width;
-            nudsid.Minimum = 3;
-            nudsid.Maximum = 20;
-            nudsid.Value = side;
-            nudsid.ValueChanged += new EventHandler(valueSideChange);
-            tab.Add(nudsid);
-
-            nudang = new NumericUpDown();
-            nudang.Top = lang.Top - 3;
-            nudang.Left = ls.Width + il;
-            nudang.Width = nudx.Width;
-            nudang.Minimum = 0;
-            nudang.Maximum = 120;
-            nudang.Value = angle;
-            nudang.ValueChanged += new EventHandler(valueAngChange);
-            tab.Add(nudang);
-
             Button shrink = new Button();
-            shrink.Text = up.Text;
-            shrink.Height = nudr.Height + 6;
-            shrink.Width = shrink.Height;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrink.BackgroundImage = tr;
-            shrink.BackgroundImageLayout = ImageLayout.Zoom;
-            shrink.Top = nudr.Top - 3;
-            shrink.Left = nudr.Left + nudr.Width + il;
-            shrink.Tag = eDirection.iLeft;
-            shrink.Click += new EventHandler(valueRchange);
-            tab.Add(shrink);
-
             Button increase = new Button();
-            increase.Text = up.Text;
-            increase.Height = shrink.Height;
-            increase.Width = shrink.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increase.BackgroundImage = tr;
-            increase.BackgroundImageLayout = ImageLayout.Zoom;
-            increase.Top = shrink.Top;
-            increase.Left = shrink.Left + 2 * shrink.Width;
-            increase.Tag = eDirection.iRight;
-            increase.Click += new EventHandler(valueRchange);
-            tab.Add(increase);
-
             PictureBox pbr = new PictureBox();
 
-            pbr.Height = shrink.Height;
-            pbr.Width = shrink.Width;
-            pbr.Top = shrink.Top;
-            pbr.Left = shrink.Left + shrink.Width;
+            loadUpDown(il, ly.Top + ly.Height + il * 6, ref ra, "R=", ref nudr,
+                ref shrink, ref increase, ref pbr, Properties.Resources.Radius);
 
-            tr = Properties.Resources.Radius;
-            tr.MakeTransparent(Color.White);
+            nudr.Value = r;
+            nudr.Minimum = 1;
 
-            pbr.Image = tr;
-            pbr.SizeMode = PictureBoxSizeMode.Zoom;
+            nudr.ValueChanged += new EventHandler(valueRchange);
+            shrink.Click += new EventHandler(valueRchange);
+            increase.Click += new EventHandler(valueRchange);
+
+            tab.Add(ra);
+            tab.Add(nudr);
+            tab.Add(shrink);
+            tab.Add(increase);
             tab.Add(pbr);
 
+            Label ls = new Label();
+            nudsid = new NumericUpDown();
             Button shrinkSide = new Button();
-            shrinkSide.Text = up.Text;
-            shrinkSide.Height = shrink.Height;
-            shrinkSide.Width = shrinkSide.Height;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrinkSide.BackgroundImage = tr;
-            shrinkSide.BackgroundImageLayout = ImageLayout.Zoom;
-            shrinkSide.Top = nudsid.Top - 3;
-            shrinkSide.Left = nudsid.Left + nudsid.Width + il;
-            shrinkSide.Tag = eDirection.iLeft;
-            shrinkSide.Click += new EventHandler(valueSideChange);
-            tab.Add(shrinkSide);
-
             Button increaseSide = new Button();
-            increaseSide.Text = up.Text;
-            increaseSide.Height = shrink.Height;
-            increaseSide.Width = shrink.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increaseSide.BackgroundImage = tr;
-            increaseSide.BackgroundImageLayout = ImageLayout.Zoom;
-            increaseSide.Top = shrinkSide.Top;
-            increaseSide.Left = shrinkSide.Left + 2 * shrinkSide.Width;
-            increaseSide.Tag = eDirection.iRight;
-            increaseSide.Click += new EventHandler(valueSideChange);
-            tab.Add(increaseSide);
-
             PictureBox pbSid = new PictureBox();
 
-            pbSid.Height = shrink.Height;
-            pbSid.Width = shrink.Width;
-            pbSid.Top = shrinkSide.Top;
-            pbSid.Left = shrinkSide.Left + shrinkSide.Width;
+            loadUpDown(il, ra.Top + ra.Height + il * 2, ref ls, "Sides", ref nudsid,
+                ref shrinkSide, ref increaseSide, ref pbSid, Properties.Resources.Count);
 
-            tr = Properties.Resources.Count;
-            tr.MakeTransparent(Color.White);
+            nudsid.Value = side;
+            nudsid.Minimum = 3;
+            nudsid.Maximum = 20;
 
-            pbSid.Image = tr;
-            pbSid.SizeMode = PictureBoxSizeMode.Zoom;
+            nudsid.ValueChanged += new EventHandler(valueSideChange);
+            shrinkSide.Click += new EventHandler(valueSideChange);
+            increaseSide.Click += new EventHandler(valueSideChange);
+
+            tab.Add(ls);
+            tab.Add(nudsid);
+            tab.Add(shrinkSide);
+            tab.Add(increaseSide);
             tab.Add(pbSid);
 
+            Label lang = new Label();
+            nudang = new NumericUpDown();
             Button shrinkAng = new Button();
-            shrinkAng.Text = up.Text;
-            shrinkAng.Height = shrink.Height;
-            shrinkAng.Width = shrinkAng.Height;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrinkAng.BackgroundImage = tr;
-            shrinkAng.BackgroundImageLayout = ImageLayout.Zoom;
-            shrinkAng.Top = nudang.Top - 3;
-            shrinkAng.Left = nudang.Left + nudang.Width + il;
-            shrinkAng.Tag = eDirection.iLeft;
-            shrinkAng.Click += new EventHandler(valueAngChange);
-            tab.Add(shrinkAng);
-
             Button increaseAng = new Button();
-            increaseAng.Text = up.Text;
-            increaseAng.Height = shrink.Height;
-            increaseAng.Width = shrink.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increaseAng.BackgroundImage = tr;
-            increaseAng.BackgroundImageLayout = ImageLayout.Zoom;
-            increaseAng.Top = shrinkAng.Top;
-            increaseAng.Left = shrinkAng.Left + 2 * shrinkAng.Width;
-            increaseAng.Tag = eDirection.iRight;
-            increaseAng.Click += new EventHandler(valueAngChange);
-            tab.Add(increaseAng);
-
             PictureBox pbAng = new PictureBox();
 
-            pbAng.Height = shrink.Height;
-            pbAng.Width = shrink.Width;
-            pbAng.Top = shrinkAng.Top;
-            pbAng.Left = shrinkAng.Left + shrinkAng.Width;
+            loadUpDown(il, ls.Top + ls.Height + il * 2, ref lang, "Angle", ref nudang,
+                ref shrinkAng, ref increaseAng, ref pbAng, Properties.Resources.ArcRadius);
 
-            tr = Properties.Resources.ArcRadius;
-            tr.MakeTransparent(Color.White);
+            nudang.Value = angle;
+            nudang.Maximum = 120;
 
-            pbAng.Image = tr;
-            pbAng.SizeMode = PictureBoxSizeMode.Zoom;
+            nudang.ValueChanged += new EventHandler(valueAngChange);
+            shrinkAng.Click += new EventHandler(valueAngChange);
+            increaseAng.Click += new EventHandler(valueAngChange);
+
+            tab.Add(lang);
+            tab.Add(nudang);
+            tab.Add(shrinkAng);
+            tab.Add(increaseAng);
             tab.Add(pbAng);
 
             return tab;
@@ -5097,7 +4990,8 @@ namespace Designer2
         public override List<errClass> test()
         {
             List<errClass> ts = new List<errClass>();
-
+            List<Point> lPt = new List<Point>();
+            lPt.AddRange(getPoint());
             for (int i = 0; i < lPt.Count; i++)
             {
                 if (lPt[i].X < 0)
@@ -5378,6 +5272,7 @@ namespace Designer2
         {
             if (fill)
             {
+                int rad = r;
                 int f = 1 - r;
                 int ddF_x = 1;
                 int ddF_y = -r - r;
@@ -5385,11 +5280,11 @@ namespace Designer2
                 int x0 = c.X;
                 int y0 = c.Y;
 
-                while (x < r)
+                while (x < rad)
                 {
                     if (f >= 0)
                     {
-                        r--;
+                        rad--;
                         ddF_y += 2;
                         f += ddF_y;
                     }
@@ -5399,34 +5294,72 @@ namespace Designer2
 
                     switch (q)
                     {
-                        case eQuarter.qUL:
-                            drawLine(ref canva, x0 - r, y0 + x, x0, y0 + x, cl, tag);
-                            drawLine(ref canva, x0 - x, y0 + r, x0, y0 + r, cl, tag);
+                        case eQuarter.qDL:
+                            drawLine(ref canva, x0 - rad, y0 + x, x0, y0 + x, cl, tag);
+                            drawLine(ref canva, x0 - x, y0 + rad, x0, y0 + rad, cl, tag);
                             break;
 
                         case eQuarter.qUR:
-                            drawLine(ref canva, x0, y0 - r, x0 + x, y0 - r, cl, tag);
-                            drawLine(ref canva, x0, y0 - x, x0 + r, y0 - x, cl, tag);
+                            drawLine(ref canva, x0, y0 - rad, x0 + x, y0 - rad, cl, tag);
+                            drawLine(ref canva, x0, y0 - x, x0 + rad, y0 - x, cl, tag);
                             break;
 
-                        case eQuarter.qDL:
-                            drawLine(ref canva, x0 - r, y0 - x, x0, y0 - x, cl, tag);
-                            drawLine(ref canva, x0 - x, y0 - r, x0, y0 - r, cl, tag);
+                        case eQuarter.qUL:
+                            drawLine(ref canva, x0 - rad, y0 - x, x0, y0 - x, cl, tag);
+                            drawLine(ref canva, x0 - x, y0 - rad, x0, y0 - rad, cl, tag);
                             break;
 
                         case eQuarter.qDR:
-                            drawLine(ref canva, x0, y0 + r, x0 + x, y0 + r, cl, tag);
-                            drawLine(ref canva, x0, y0 + x, x0 + r, y0 + x, cl, tag);
+                            drawLine(ref canva, x0, y0 + rad, x0 + x, y0 + rad, cl, tag);
+                            drawLine(ref canva, x0, y0 + x, x0 + rad, y0 + x, cl, tag);
                             break;
 
                         default:
                             break;
                     }
                 }
+                switch (q)
+                {
+                    case eQuarter.qDL:
+                    case eQuarter.qUL:
+                        drawHline(ref canva, x0 - r, y0, r + 1, cl, tag);
+                        break;
+
+                    case eQuarter.qDR:
+                    case eQuarter.qUR:
+                        drawHline(ref canva, x0, y0, r + 1, cl, tag);
+                        break;
+                }
             }
             else
             {
                 drawCircleHelper(ref canva, c.X, c.Y, r, q, cl, tag);
+
+                switch (q)
+                {
+                    case eQuarter.qUL:
+                        drawPixel(ref canva, c.X - r, c.Y, cl, tag);
+                        drawPixel(ref canva, c.X, c.Y - r, cl, tag);
+                        break;
+
+                    case eQuarter.qUR:
+                        drawPixel(ref canva, c.X + r, c.Y, cl, tag);
+                        drawPixel(ref canva, c.X, c.Y - r, cl, tag);
+                        break;
+
+                    case eQuarter.qDL:
+                        drawPixel(ref canva, c.X - r, c.Y, cl, tag);
+                        drawPixel(ref canva, c.X, c.Y + r, cl, tag);
+                        break;
+
+                    case eQuarter.qDR:
+                        drawPixel(ref canva, c.X + r, c.Y, cl, tag);
+                        drawPixel(ref canva, c.X, c.Y + r, cl, tag);
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
             if (cl == eColor.Selected)
@@ -5438,22 +5371,12 @@ namespace Designer2
                 switch (q)
                 {
                     case eQuarter.qUL:
-                        drawPixel(ref canva, c.X - r, c.Y, cl2, tag);
-                        drawPixel(ref canva, c.X, c.Y - r, cl2, tag);
-                        break;
-
                     case eQuarter.qUR:
-                        drawPixel(ref canva, c.X + r, c.Y, cl2, tag);
                         drawPixel(ref canva, c.X, c.Y - r, cl2, tag);
                         break;
 
                     case eQuarter.qDL:
-                        drawPixel(ref canva, c.X - r, c.Y, cl2, tag);
-                        drawPixel(ref canva, c.X, c.Y + r, cl2, tag);
-                        break;
-
                     case eQuarter.qDR:
-                        drawPixel(ref canva, c.X + r, c.Y, cl2, tag);
                         drawPixel(ref canva, c.X, c.Y + r, cl2, tag);
                         break;
 
@@ -5545,64 +5468,24 @@ namespace Designer2
             tab.Add(pbc);
 
             Label ra = new Label();
-            ra.Text = "R=";
-            ra.Top = ly.Top + ly.Height + il * 6;
-            ra.Left = lx.Left;
-            ra.Width = lx.Width;
-            tab.Add(ra);
-
             nudr = new NumericUpDown();
-            nudr.Top = ra.Top - 3;
-            nudr.Left = ra.Width + il;
-            nudr.Width = nudx.Width;
-            nudr.Minimum = nudx.Minimum;
-            nudr.Maximum = nudx.Maximum;
-            nudr.Value = r;
-            nudr.ValueChanged += new EventHandler(valueRchange);
-            tab.Add(nudr);
-
             Button shrink = new Button();
-            shrink.Text = up.Text;
-            shrink.Height = up.Height;
-            shrink.Width = up.Width;
-
-            tr = Properties.Resources.Shrink;
-            tr.MakeTransparent(Color.White);
-            shrink.BackgroundImage = tr;
-            shrink.BackgroundImageLayout = ImageLayout.Zoom;
-            shrink.Top = down.Top + down.Height + 2 * il;
-            shrink.Left = left.Left;
-            shrink.Tag = eDirection.iLeft;
-            shrink.Click += new EventHandler(valueRchange);
-            tab.Add(shrink);
-
             Button increase = new Button();
-            increase.Text = up.Text;
-            increase.Height = up.Height;
-            increase.Width = up.Width;
-
-            tr = Properties.Resources.Increase;
-            tr.MakeTransparent(Color.White);
-            increase.BackgroundImage = tr;
-            increase.BackgroundImageLayout = ImageLayout.Zoom;
-            increase.Top = shrink.Top;
-            increase.Left = right.Left;
-            increase.Tag = eDirection.iRight;
-            increase.Click += new EventHandler(valueRchange);
-            tab.Add(increase);
-
             PictureBox pbr = new PictureBox();
 
-            pbr.Height = up.Height;
-            pbr.Width = up.Width;
-            pbr.Top = shrink.Top;
-            pbr.Left = shrink.Left + shrink.Width;
+            loadUpDown(il, ly.Top + ly.Height + il * 6, ref ra, "R=", ref nudr,
+                ref shrink, ref increase, ref pbr, Properties.Resources.ArcRadius);
 
-            tr = Properties.Resources.ArcRadius;
-            tr.MakeTransparent(Color.White);
+            nudr.Value = r;
 
-            pbr.Image = tr;
-            pbr.SizeMode = PictureBoxSizeMode.Zoom;
+            nudr.ValueChanged += new EventHandler(valueRchange);
+            shrink.Click += new EventHandler(valueRchange);
+            increase.Click += new EventHandler(valueRchange);
+
+            tab.Add(ra);
+            tab.Add(nudr);
+            tab.Add(shrink);
+            tab.Add(increase);
             tab.Add(pbr);
 
             return tab;
@@ -5862,7 +5745,7 @@ namespace Designer2
                     break;
             }
 
-            return new Rectangle(x, y, r, r);
+            return new Rectangle(x, y, r + 1, r + 1);
         }
 
         //---
@@ -6192,7 +6075,7 @@ namespace Designer2
         //---
         protected eColor clr;
 
-        protected static eColor def = eColor.Red;
+        protected static eColor def = eColor.White;
         protected static eSkin skn = eSkin.Light;
 
         protected ComboBox cbclr;

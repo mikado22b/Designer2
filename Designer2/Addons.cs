@@ -799,8 +799,14 @@ namespace Designer2
             }
             bool changeCanvas = false;
             c = compare(ref changeCanvas, c);
-
+            canvas = c;
             return c;
+        }
+
+        //---
+        public void painted()
+        {
+            canvas.painted();
         }
 
         //---

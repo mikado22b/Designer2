@@ -175,7 +175,7 @@ namespace Designer2
             Rectangle r = icL[i].rect();
             if (r.X != -1000)
             {
-                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes.Add(new TreeNode("ICO position."));
+                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes.Add(new TreeNode("ICO area."));
                 if (r.X < 0 || r.Y < 0)
                 {
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].ImageIndex = (int)eImage.iPositionWar;
@@ -186,7 +186,7 @@ namespace Designer2
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].ImageIndex = (int)eImage.iPosition;
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].SelectedImageIndex = (int)eImage.iPosition;
                 }
-                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Origin point X= " + r.X);
+                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Minimum X= " + r.X);
                 if (r.X < 0)
                 {
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[0].ImageIndex = (int)eImage.iXposWar;
@@ -197,7 +197,7 @@ namespace Designer2
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[0].ImageIndex = (int)eImage.iXpos;
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[0].SelectedImageIndex = (int)eImage.iXpos;
                 }
-                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Origin point Y= " + r.Y);
+                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Minimum Y= " + r.Y);
                 if (r.Y < 0)
                 {
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[1].ImageIndex = (int)eImage.iYposWar;
@@ -209,11 +209,11 @@ namespace Designer2
                     treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[1].SelectedImageIndex = (int)eImage.iYpos;
                 }
 
-                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Max X= " + (r.X + r.Width));
+                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Maximum X= " + (r.X + r.Width - 1));
                 treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[2].ImageIndex = (int)eImage.iXpos;
                 treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[2].SelectedImageIndex = (int)eImage.iXpos;
 
-                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Max Y= " + (r.Y + r.Height));
+                treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes.Add("Maximum Y= " + (r.Y + r.Height - 1));
                 treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[3].ImageIndex = (int)eImage.iYpos;
                 treeView.Nodes[0].Nodes[baseNode].Nodes[i].Nodes[3].Nodes[3].SelectedImageIndex = (int)eImage.iYpos;
 

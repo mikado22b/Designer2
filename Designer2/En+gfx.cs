@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Designer2
 {
@@ -63,13 +66,6 @@ namespace Designer2
     {
         qUL = 1, qUR, qDL, qDR
     }
-
-    //---B
-    /* public enum eState
-     {
-         eInactiv, eSelected, eHotTrack, eERR
-     }
-     */
 
     //---B
     public enum eDirection
@@ -262,6 +258,9 @@ namespace Designer2
         public Basis()
         {
             pixels = new Pix[dim, dim];
+            for (int x = 0; x < 382; x++)
+                for (int y = 0; y < 382; y++)
+                    pixels[x, y] = new Pix();
         }
 
         //---
@@ -283,6 +282,18 @@ namespace Designer2
                 for (int z = 0; z < dim; z++)
                 {
                     pixels[i, z].clear();
+                }
+            }
+        }
+
+        //---
+        public void painted()
+        {
+            for (int i = 0; i < dim; i++)
+            {
+                for (int z = 0; z < dim; z++)
+                {
+                    pixels[i, z].toDraw = false;
                 }
             }
         }
@@ -341,4 +352,204 @@ namespace Designer2
     }
 
     //---Y
+    public class ICOdraw
+    {
+        protected float scale = 1;
+        protected int offsetX = -127;
+        protected int offsetY = -127;
+        protected Color bGround;
+        protected Color sel;
+        protected Color selPoint;
+        protected Color hPoint;
+
+        protected Panel rulerX;
+        protected Panel rulerY;
+        protected Panel canvas;
+        protected HScrollBar hbar;
+        protected VScrollBar vbar;
+
+        protected Basis fu;
+
+        //---
+        public ICOdraw()
+        {
+            rulerX = new Panel();
+            rulerY = new Panel();
+            canvas = new Panel();
+            hbar = new HScrollBar();
+            vbar = new VScrollBar();
+            bGround = Color.Black;
+            sel = Color.Cyan;
+            selPoint = Color.Navy;
+            hPoint = Color.Red;
+            fu = new Basis();
+        }
+
+        //---
+        public List<Control> loadItem(ContextMenuStrip cm)
+        {
+            List<Control> tab = new List<Control>();
+            rulerX.Left = 42;
+            rulerX.Top = 73;
+            rulerX.Height = 27;
+            rulerX.Width = 208;
+            rulerX.BorderStyle = BorderStyle.FixedSingle;
+            rulerX.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tab.Add(rulerX);
+
+            rulerY.Left = 12;
+            rulerY.Top = 101;
+            rulerY.Height = 323;
+            rulerY.Width = 27;
+            rulerY.BorderStyle = BorderStyle.FixedSingle;
+            rulerY.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom;
+            tab.Add(rulerY);
+
+            canvas.Left = 42;
+            canvas.Top = 101;
+            canvas.Height = 323;
+            canvas.Width = 208;
+            canvas.BorderStyle = BorderStyle.FixedSingle;
+            canvas.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom;
+            canvas.BackColor = SystemColors.ControlLight;
+            canvas.ContextMenuStrip = cm;
+            tab.Add(canvas);
+
+            return tab;
+        }
+
+        //---
+        public float pixSize
+        {
+            set
+            {
+                bool fl = false;
+                if (scale != value) fl = true;
+                scale = value;
+                forceDraw();
+            }
+            get
+            {
+                return scale;
+            }
+        }
+
+        //---
+        public int shiftX
+        {
+            get { return offsetX; }
+            set { offsetX = value; }
+        }
+
+        //---
+        public int shiftY
+        {
+            get { return offsetY; }
+            set
+            {
+                offsetY = value;
+            }
+        }
+
+        //---
+        public Color backGround
+        {
+            set
+            {
+                bGround = value;
+            }
+            get
+            {
+                return bGround;
+            }
+        }
+
+        //---
+        public Color selected
+        {
+            set
+            {
+                sel = value;
+            }
+            get
+            {
+                return sel;
+            }
+        }
+
+        //---
+        public Color selectedPoint
+        {
+            set
+            {
+                selPoint = value;
+            }
+            get
+            {
+                return selPoint;
+            }
+        }
+
+        //---
+        public Color hotPoint
+        {
+            set
+            {
+                hPoint = value;
+            }
+            get
+            {
+                return hPoint;
+            }
+        }
+
+        //---
+        protected void forceDraw()
+        {
+            draw(fu, true);
+        }
+
+        //---
+        public void draw(Basis b, bool allDraw = false)
+        {
+            Graphics gfx = canvas.CreateGraphics();
+            gfx.ScaleTransform(scale, scale);
+            gfx.TranslateTransform(offsetX, offsetY);
+
+            gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+            if (allDraw) gfx.Clear(RGB32(eColor.None));
+
+            for (int x = 0; x < 382; x++)
+            {
+                for (int y = 0; y < 382; y++)
+                {
+                    if (b[x, y].toDraw || (allDraw && b[x, y].color != eColor.None))
+                    {
+                        gfx.FillRectangle(new SolidBrush(RGB32(b[x, y].color)), x, y, 1, 1);
+                    }
+                }
+            }
+            fu = b;
+        }
+
+        //---
+        public Color RGB32(eColor cl)
+        {
+            if (cl == eColor.Def) cl = color.Default;
+            if (cl < eColor.Def)
+            {
+                UInt16 col = color.indColorTab[(int)cl];
+
+                int r = (col >> 11) << 3;
+                int g = ((col >> 5) & 63) << 2;
+                int b = (col & 31) << 3;
+                return Color.FromArgb(r, g, b);
+            }
+            if (cl == eColor.Selected) return selected;
+            if (cl == eColor.SelectedPoint) return selectedPoint;
+            if (cl == eColor.HotPoint) return hotPoint;
+
+            return backGround;
+        }
+    }
 }
