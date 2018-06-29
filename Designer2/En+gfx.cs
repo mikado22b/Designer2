@@ -252,14 +252,14 @@ namespace Designer2
     public class Basis
     {
         protected Pix[,] pixels;
-        public const int dim = 382;
+        public const int dim = 383;
 
         //---
         public Basis()
         {
             pixels = new Pix[dim, dim];
-            for (int x = 0; x < 382; x++)
-                for (int y = 0; y < 382; y++)
+            for (int x = 0; x < dim; x++)
+                for (int y = 0; y < dim; y++)
                     pixels[x, y] = new Pix();
         }
 
@@ -354,9 +354,9 @@ namespace Designer2
     //---Y
     public class ICOdraw
     {
-        protected float scale = 1;
-        protected int offsetX = -127;
-        protected int offsetY = -127;
+        protected float scale = 0.5f;
+        protected int offsetX = 0;
+        protected int offsetY = 0;
         protected Color bGround;
         protected Color sel;
         protected Color selPoint;
@@ -388,32 +388,57 @@ namespace Designer2
         //---
         public List<Control> loadItem(ContextMenuStrip cm)
         {
+            int top = 56;
+            int left = 2;
+            int width = 205;
+            int height = 312;
+            int strip = 27;
             List<Control> tab = new List<Control>();
-            rulerX.Left = 42;
-            rulerX.Top = 73;
-            rulerX.Height = 27;
-            rulerX.Width = 208;
+            rulerX.Left = left + strip;
+            rulerX.Top = top + 1;
+            rulerX.Height = strip;
+            rulerX.Width = width - 2 * strip; ;
             rulerX.BorderStyle = BorderStyle.FixedSingle;
+            rulerX.BackColor = SystemColors.ControlLight;
             rulerX.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tab.Add(rulerX);
 
-            rulerY.Left = 12;
-            rulerY.Top = 101;
-            rulerY.Height = 323;
-            rulerY.Width = 27;
+            rulerY.Left = left + 1;
+            rulerY.Top = top + strip; ;
+            rulerY.Height = height - 2 * strip; ;
+            rulerY.Width = strip;
             rulerY.BorderStyle = BorderStyle.FixedSingle;
+            rulerY.BackColor = SystemColors.ControlLight;
             rulerY.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom;
             tab.Add(rulerY);
 
-            canvas.Left = 42;
-            canvas.Top = 101;
-            canvas.Height = 323;
-            canvas.Width = 208;
+            canvas.Left = left + strip;
+            canvas.Top = top + strip;
+            canvas.Height = height - 2 * strip;
+            canvas.Width = width - 2 * strip;
             canvas.BorderStyle = BorderStyle.FixedSingle;
             canvas.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom;
             canvas.BackColor = SystemColors.ControlLight;
             canvas.ContextMenuStrip = cm;
             tab.Add(canvas);
+
+            hbar.Left = left + strip + 1;
+            hbar.Top = top + strip + canvas.Height;
+            hbar.Height = strip;
+            hbar.Width = canvas.Width - 2;
+            hbar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            hbar.BackColor = SystemColors.ControlLight;
+            hbar.Maximum = 382;
+            tab.Add(hbar);
+
+            vbar.Left = left + strip + canvas.Width;
+            vbar.Top = top + strip + 1;
+            vbar.Height = height - 2 * strip - 2;
+            vbar.Width = strip;
+            vbar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            vbar.BackColor = SystemColors.ControlLight;
+            vbar.Maximum = 382;
+            tab.Add(vbar);
 
             return tab;
         }
@@ -426,7 +451,7 @@ namespace Designer2
                 bool fl = false;
                 if (scale != value) fl = true;
                 scale = value;
-                forceDraw();
+                if (fl) forceDraw();
             }
             get
             {
@@ -437,18 +462,30 @@ namespace Designer2
         //---
         public int shiftX
         {
-            get { return offsetX; }
-            set { offsetX = value; }
+            set
+            {
+                bool fl = false;
+                if (offsetX != value) fl = true;
+                offsetX = value;
+                if (fl) forceDraw();
+            }
+            get
+            {
+                return offsetX;
+            }
         }
 
         //---
         public int shiftY
         {
-            get { return offsetY; }
             set
             {
+                bool fl = false;
+                if (offsetY != value) fl = true;
                 offsetY = value;
+                if (fl) forceDraw();
             }
+            get { return offsetY; }
         }
 
         //---
@@ -456,7 +493,10 @@ namespace Designer2
         {
             set
             {
+                bool fl = false;
+                if (bGround != value) fl = true;
                 bGround = value;
+                if (fl) forceDraw();
             }
             get
             {
@@ -517,11 +557,15 @@ namespace Designer2
             gfx.TranslateTransform(offsetX, offsetY);
 
             gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-            if (allDraw) gfx.Clear(RGB32(eColor.None));
-
-            for (int x = 0; x < 382; x++)
+            if (allDraw)
             {
-                for (int y = 0; y < 382; y++)
+                gfx.Clear(canvas.BackColor);
+                gfx.FillRectangle(new SolidBrush(RGB32(eColor.None)), 0, 0, Basis.dim, Basis.dim);
+            }
+
+            for (int x = 0; x < Basis.dim; x++)
+            {
+                for (int y = 0; y < Basis.dim; y++)
                 {
                     if (b[x, y].toDraw || (allDraw && b[x, y].color != eColor.None))
                     {

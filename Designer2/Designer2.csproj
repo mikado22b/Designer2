@@ -78,6 +78,12 @@
     <Compile Include="FormStat.Designer.cs">
       <DependentUpon>FormStat.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormZoom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormZoom.Designer.cs">
+      <DependentUpon>FormZoom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormStat.resx">
       <DependentUpon>FormStat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormZoom.resx">
+      <DependentUpon>FormZoom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

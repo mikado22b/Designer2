@@ -67,7 +67,7 @@ namespace Designer2
         //---
         protected void drawPixel(ref Basis canva, int x, int y, eColor cl, int tag)
         {
-            if (x < -127 || y < -127 || x >= 127 + 127 || y >= 127 + 127) return;
+            if (x < -127 || y < -127 || x >= 128 + 127 || y >= 128 + 127) return;
             x += 127;
             y += 127;
             canva[x, y].color = cl;

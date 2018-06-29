@@ -1224,11 +1224,6 @@ namespace Designer2
 
         //---
 
-        private void toolPixSize_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ICOpanel.pixSize = float.Parse(toolPixSize.Items[toolPixSize.SelectedIndex].ToString());
-        }
-
         //---
         private void forceDraw_Click(object sender, EventArgs e)
         {
@@ -1244,6 +1239,11 @@ namespace Designer2
 
             ICOpanel.draw(b, true);
             icons[listBoxIcons.SelectedIndex].painted();
+        }
+
+        //---
+        private void toolZoom_Click(object sender, EventArgs e)
+        {
         }
     }
 }

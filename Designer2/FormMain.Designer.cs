@@ -95,7 +95,6 @@
             this.MenuCanvas = new System.Windows.Forms.ToolStripMenuItem();
             this.pixelSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.originPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuBackgroundColor = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuAutoLoad = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRemember = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuDefColor = new System.Windows.Forms.ToolStripComboBox();
@@ -110,7 +109,7 @@
             this.MenuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuCS = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Draw = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolPixSize = new System.Windows.Forms.ToolStripComboBox();
+            this.forceDraw = new System.Windows.Forms.ToolStripMenuItem();
             this.toolOffsetX = new System.Windows.Forms.ToolStripTextBox();
             this.toolOffsetY = new System.Windows.Forms.ToolStripTextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -152,9 +151,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.vBar1 = new System.Windows.Forms.VScrollBar();
-            this.hBar1 = new System.Windows.Forms.HScrollBar();
-            this.forceDraw = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuBackgroundColor = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolZoom = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -179,6 +177,7 @@
             // 
             // statusStrip
             // 
+            this.statusStrip.BackColor = System.Drawing.SystemColors.ControlLight;
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SelectedIcoLabel,
@@ -720,7 +719,6 @@
             // 
             this.MenuSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuCanvas,
-            this.MenuBackgroundColor,
             this.MenuAutoLoad,
             this.MenuRemember,
             this.MenuDefColor,
@@ -752,14 +750,6 @@
             this.originPointToolStripMenuItem.Name = "originPointToolStripMenuItem";
             this.originPointToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
             this.originPointToolStripMenuItem.Text = "Origin point...";
-            // 
-            // MenuBackgroundColor
-            // 
-            this.MenuBackgroundColor.Image = global::Designer2.Properties.Resources.Color;
-            this.MenuBackgroundColor.Name = "MenuBackgroundColor";
-            this.MenuBackgroundColor.Size = new System.Drawing.Size(247, 26);
-            this.MenuBackgroundColor.Text = "&Background color...";
-            this.MenuBackgroundColor.Click += new System.EventHandler(this.MenuBackgroundColor_Click);
             // 
             // MenuAutoLoad
             // 
@@ -794,9 +784,11 @@
             // colorsToolStripMenuItem
             // 
             this.colorsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuBackgroundColor,
             this.selectedItemToolStripMenuItem,
             this.specialPointToolStripMenuItem,
             this.hotPointToolStripMenuItem});
+            this.colorsToolStripMenuItem.Image = global::Designer2.Properties.Resources.Color;
             this.colorsToolStripMenuItem.Name = "colorsToolStripMenuItem";
             this.colorsToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
             this.colorsToolStripMenuItem.Text = "Colors...";
@@ -804,19 +796,19 @@
             // selectedItemToolStripMenuItem
             // 
             this.selectedItemToolStripMenuItem.Name = "selectedItemToolStripMenuItem";
-            this.selectedItemToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.selectedItemToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             this.selectedItemToolStripMenuItem.Text = "Selected item...";
             // 
             // specialPointToolStripMenuItem
             // 
             this.specialPointToolStripMenuItem.Name = "specialPointToolStripMenuItem";
-            this.specialPointToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.specialPointToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             this.specialPointToolStripMenuItem.Text = "Special point...";
             // 
             // hotPointToolStripMenuItem
             // 
             this.hotPointToolStripMenuItem.Name = "hotPointToolStripMenuItem";
-            this.hotPointToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.hotPointToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             this.hotPointToolStripMenuItem.Text = "Hot point...";
             // 
             // MenuInfo
@@ -860,11 +852,11 @@
             this.MenuCS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Draw,
             this.forceDraw,
-            this.toolPixSize,
+            this.toolZoom,
             this.toolOffsetX,
             this.toolOffsetY});
             this.MenuCS.Name = "contextMenuStrip1";
-            this.MenuCS.Size = new System.Drawing.Size(220, 142);
+            this.MenuCS.Size = new System.Drawing.Size(220, 162);
             // 
             // Draw
             // 
@@ -875,19 +867,12 @@
             this.Draw.Text = "reDraw";
             this.Draw.Click += new System.EventHandler(this.Draw_Click);
             // 
-            // toolPixSize
+            // forceDraw
             // 
-            this.toolPixSize.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "4",
-            "8",
-            "15",
-            "32",
-            "64"});
-            this.toolPixSize.Name = "toolPixSize";
-            this.toolPixSize.Size = new System.Drawing.Size(121, 28);
-            this.toolPixSize.SelectedIndexChanged += new System.EventHandler(this.toolPixSize_SelectedIndexChanged);
+            this.forceDraw.Name = "forceDraw";
+            this.forceDraw.Size = new System.Drawing.Size(219, 24);
+            this.forceDraw.Text = "force Draw";
+            this.forceDraw.Click += new System.EventHandler(this.forceDraw_Click);
             // 
             // toolOffsetX
             // 
@@ -1315,42 +1300,26 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // vBar1
+            // MenuBackgroundColor
             // 
-            this.vBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.vBar1.Location = new System.Drawing.Point(253, 101);
-            this.vBar1.Maximum = 382;
-            this.vBar1.Name = "vBar1";
-            this.vBar1.Size = new System.Drawing.Size(23, 323);
-            this.vBar1.TabIndex = 6;
+            this.MenuBackgroundColor.Name = "MenuBackgroundColor";
+            this.MenuBackgroundColor.Size = new System.Drawing.Size(210, 26);
+            this.MenuBackgroundColor.Text = "&Background color...";
             // 
-            // hBar1
+            // toolZoom
             // 
-            this.hBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.hBar1.Location = new System.Drawing.Point(42, 427);
-            this.hBar1.Maximum = 382;
-            this.hBar1.Name = "hBar1";
-            this.hBar1.Size = new System.Drawing.Size(208, 22);
-            this.hBar1.TabIndex = 7;
-            // 
-            // forceDraw
-            // 
-            this.forceDraw.Name = "forceDraw";
-            this.forceDraw.Size = new System.Drawing.Size(219, 24);
-            this.forceDraw.Text = "force Draw";
-            this.forceDraw.Click += new System.EventHandler(this.forceDraw_Click);
+            this.toolZoom.Name = "toolZoom";
+            this.toolZoom.Size = new System.Drawing.Size(219, 24);
+            this.toolZoom.Text = "&Zoom...";
+            this.toolZoom.Click += new System.EventHandler(this.toolZoom_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(568, 478);
-            this.Controls.Add(this.hBar1);
-            this.Controls.Add(this.vBar1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
@@ -1435,7 +1404,6 @@
         private System.Windows.Forms.TabPage itemsTab;
         private System.Windows.Forms.TabPage propertyTab;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.ToolStripMenuItem MenuBackgroundColor;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.ToolStripStatusLabel SelectedIcoLabel;
         private System.Windows.Forms.ToolStripMenuItem MenuRecently;
@@ -1516,12 +1484,11 @@
         private System.Windows.Forms.ToolStripMenuItem selectedItemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem specialPointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hotPointToolStripMenuItem;
-        private System.Windows.Forms.VScrollBar vBar1;
-        private System.Windows.Forms.HScrollBar hBar1;
-        private System.Windows.Forms.ToolStripComboBox toolPixSize;
         private System.Windows.Forms.ToolStripTextBox toolOffsetX;
         private System.Windows.Forms.ToolStripTextBox toolOffsetY;
         private System.Windows.Forms.ToolStripMenuItem forceDraw;
+        private System.Windows.Forms.ToolStripMenuItem MenuBackgroundColor;
+        private System.Windows.Forms.ToolStripMenuItem toolZoom;
     }
 }
 
