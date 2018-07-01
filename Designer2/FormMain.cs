@@ -94,6 +94,9 @@ namespace Designer2
                 saveSettings();
             }
             ICOpanel.backGround = setting.bgColor;
+            ICOpanel.selected = setting.selColor;
+            ICOpanel.selectedPoint = setting.selpColor;
+            ICOpanel.hotPoint = setting.hotColor;
             recentFileUpdate();
             autoLoadUpDate();
             windowSaveUpdate();
@@ -105,6 +108,9 @@ namespace Designer2
         private void saveSettings()
         {
             setting.bgColor = ICOpanel.backGround;
+            setting.selColor = ICOpanel.selected;
+            setting.selpColor = ICOpanel.selectedPoint;
+            setting.hotColor = ICOpanel.hotPoint;
             setting.autoLoad = MenuAutoLoad.Checked;
             setting.windowSize = this.Size;
             setting.windowLocation = this.Location;
@@ -590,6 +596,28 @@ namespace Designer2
             {
                 setting.bgColor = colorDialog1.Color;
                 ICOpanel.backGround = setting.bgColor;
+            }
+        }
+
+        //---
+        private void selectedItemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            colorDialog1.Color = ICOpanel.selected;
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                setting.selColor = colorDialog1.Color;
+                ICOpanel.selected = setting.selColor;
+            }
+        }
+
+        //---
+        private void cMenuSpecialPoint_Click(object sender, EventArgs e)
+        {
+            colorDialog1.Color = ICOpanel.selectedPoint;
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                setting.selpColor = colorDialog1.Color;
+                ICOpanel.selectedPoint = setting.selpColor;
             }
         }
 
@@ -1242,8 +1270,15 @@ namespace Designer2
         }
 
         //---
+
         private void toolZoom_Click(object sender, EventArgs e)
         {
+            FormZoom f = new FormZoom((int)ICOpanel.pixSize);
+            int z = 1;
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                ICOpanel.pixSize = f.zoomValue;
+            }
         }
     }
 }

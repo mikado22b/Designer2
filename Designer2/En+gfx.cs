@@ -354,7 +354,7 @@ namespace Designer2
     //---Y
     public class ICOdraw
     {
-        protected float scale = 0.5f;
+        protected float scale = 1;
         protected int offsetX = 0;
         protected int offsetY = 0;
         protected Color bGround;
@@ -380,7 +380,7 @@ namespace Designer2
             vbar = new VScrollBar();
             bGround = Color.Black;
             sel = Color.Cyan;
-            selPoint = Color.Navy;
+            selPoint = Color.Yellow;
             hPoint = Color.Red;
             fu = new Basis();
         }

@@ -30,15 +30,16 @@ namespace Designer2
             textBox1.Text = n;
         }
 
+        //---
         private void button1_Click(object sender, EventArgs e)
         {
             n = textBox1.Text;
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
         }
 
+        //---
         private void IcoName_Load(object sender, EventArgs e)
         {
-
         }
 
         //---

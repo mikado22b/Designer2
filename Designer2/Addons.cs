@@ -14,6 +14,9 @@ namespace Designer2
     public class Setting
     {
         protected Color bgCl;
+        protected Color selCl;
+        protected Color selpCl;
+        protected Color hotCl;
         protected string fileSet;
         protected string[] recentFiles = new string[10];
         protected bool al = true;
@@ -22,7 +25,7 @@ namespace Designer2
         protected bool w_s = false;
 
         protected const char sep = '*';
-        protected string[] tags = { "[BGCL]", "[LF]", "[AL]", "[WINDOW]", };
+        protected string[] tags = { "[BGCL]", "[SEL]", "[SELP]", "[HOTP]", "[LF]", "[AL]", "[WINDOW]", };
 
         //---
         public Setting(string fs)
@@ -40,9 +43,24 @@ namespace Designer2
             string settings = "Automatically created file by Designer2.\r\n" +
                 "Created at " + localDate.ToString() +
                 "\r\nPlease, do not change anything manually!\r\n";
-            //save panel1 background color
+            //save  background color
             settings += tags[indx] +
                 bgCl.ToArgb().ToString() +
+                tags[indx] + "\r\n";
+            indx++;
+            //save selected color
+            settings += tags[indx] +
+                selCl.ToArgb().ToString() +
+                tags[indx] + "\r\n";
+            indx++;
+            //save  selectedPoint color
+            settings += tags[indx] +
+                selpCl.ToArgb().ToString() +
+                tags[indx] + "\r\n";
+            indx++;
+            //save  hotPoint color
+            settings += tags[indx] +
+                hotCl.ToArgb().ToString() +
                 tags[indx] + "\r\n";
             indx++;
             //save last used file (max 10)
@@ -101,6 +119,61 @@ namespace Designer2
                 f = int.TryParse(t, out result);
                 if (f) bgColor = Color.FromArgb(result);
                 else bgColor = Color.Black;
+            }
+
+            //read selected color
+            indx++;
+            s = settings.IndexOf(tags[indx].ToString());
+            e = settings.LastIndexOf(tags[indx].ToString());
+            if (s < 0 || e < 0)
+            {
+                f = false;
+                selColor = Color.Cyan;
+            }
+            else
+            {
+                s += tags[indx].ToString().Count();
+                string t = settings.Substring(s, e - s);
+                int result = 0;
+                f = int.TryParse(t, out result);
+                if (f) selColor = Color.FromArgb(result);
+                else selColor = Color.Black;
+            }
+            //read selectedPoint color
+            indx++;
+            s = settings.IndexOf(tags[indx].ToString());
+            e = settings.LastIndexOf(tags[indx].ToString());
+            if (s < 0 || e < 0)
+            {
+                f = false;
+                selpColor = Color.Yellow;
+            }
+            else
+            {
+                s += tags[indx].ToString().Count();
+                string t = settings.Substring(s, e - s);
+                int result = 0;
+                f = int.TryParse(t, out result);
+                if (f) selpColor = Color.FromArgb(result);
+                else selpColor = Color.Yellow;
+            }
+            //read hotPoint color
+            indx++;
+            s = settings.IndexOf(tags[indx].ToString());
+            e = settings.LastIndexOf(tags[indx].ToString());
+            if (s < 0 || e < 0)
+            {
+                f = false;
+                hotColor = Color.Red;
+            }
+            else
+            {
+                s += tags[indx].ToString().Count();
+                string t = settings.Substring(s, e - s);
+                int result = 0;
+                f = int.TryParse(t, out result);
+                if (f) hotColor = Color.FromArgb(result);
+                else hotColor = Color.Red;
             }
             //read recently used file (max10)
             indx++;
@@ -177,6 +250,45 @@ namespace Designer2
             get
             {
                 return bgCl;
+            }
+        }
+
+        //---
+        public Color selColor
+        {
+            set
+            {
+                selCl = value;
+            }
+            get
+            {
+                return selCl;
+            }
+        }
+
+        //---
+        public Color selpColor
+        {
+            set
+            {
+                selpCl = value;
+            }
+            get
+            {
+                return selpCl;
+            }
+        }
+
+        //---
+        public Color hotColor
+        {
+            set
+            {
+                hotCl = value;
+            }
+            get
+            {
+                return hotCl;
             }
         }
 
