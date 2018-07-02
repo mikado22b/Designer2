@@ -357,6 +357,7 @@ namespace Designer2
         protected float scale = 1;
         protected int offsetX = 0;
         protected int offsetY = 0;
+
         protected Color bGround;
         protected Color sel;
         protected Color selPoint;
@@ -420,6 +421,8 @@ namespace Designer2
             canvas.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom;
             canvas.BackColor = SystemColors.ControlLight;
             canvas.ContextMenuStrip = cm;
+            canvas.SizeChanged += new EventHandler(setBars);
+
             tab.Add(canvas);
 
             hbar.Left = left + strip + 1;
@@ -428,7 +431,9 @@ namespace Designer2
             hbar.Width = canvas.Width - 2;
             hbar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
             hbar.BackColor = SystemColors.ControlLight;
-            hbar.Maximum = 382;
+            hbar.Maximum = Basis.dim;
+            hbar.Scroll += new ScrollEventHandler(scr);
+            hbar.SizeChanged += new EventHandler(setBars);
             tab.Add(hbar);
 
             vbar.Left = left + strip + canvas.Width;
@@ -437,9 +442,13 @@ namespace Designer2
             vbar.Width = strip;
             vbar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             vbar.BackColor = SystemColors.ControlLight;
-            vbar.Maximum = 382;
+            vbar.Maximum = Basis.dim;
+            vbar.Scroll += new ScrollEventHandler(scr);
+            vbar.SizeChanged += new EventHandler(setBars);
             tab.Add(vbar);
 
+            setBars(this, new EventArgs());
+            scr(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
             return tab;
         }
 
@@ -452,6 +461,8 @@ namespace Designer2
                 if (scale != value) fl = true;
                 scale = value;
                 if (fl) forceDraw();
+                setBars(scale, new EventArgs());
+                scr(scale, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
             }
             get
             {
@@ -509,7 +520,10 @@ namespace Designer2
         {
             set
             {
+                bool fl = false;
+                if (sel != value) fl = true;
                 sel = value;
+                if (fl) forceDraw();
             }
             get
             {
@@ -522,7 +536,10 @@ namespace Designer2
         {
             set
             {
+                bool fl = false;
+                if (selPoint != value) fl = true;
                 selPoint = value;
+                if (fl) forceDraw();
             }
             get
             {
@@ -535,7 +552,10 @@ namespace Designer2
         {
             set
             {
+                bool fl = false;
+                if (hPoint != value) fl = true;
                 hPoint = value;
+                if (fl) forceDraw();
             }
             get
             {
@@ -594,6 +614,51 @@ namespace Designer2
             if (cl == eColor.HotPoint) return hotPoint;
 
             return backGround;
+        }
+
+        //---
+        private void setBars(object obj, EventArgs e)
+        {
+            int x = canvas.Width;
+            int y = canvas.Height;
+            int picX = (int)(Basis.dim * scale);
+            int picY = (int)(Basis.dim * scale);
+            hbar.Maximum = picX;
+            vbar.Maximum = picY;
+
+            hbar.LargeChange = x;
+
+            vbar.LargeChange = y;
+            scr(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+
+            forceDraw();
+        }
+
+        //---
+        private void scr(object obj, ScrollEventArgs e)
+        {
+            int x = canvas.Width;
+            int y = canvas.Height;
+            int picX = (int)(Basis.dim * scale);
+            int picY = (int)(Basis.dim * scale);
+
+            if (x > picX)
+            {
+                shiftX = (int)(((x - picX) / 2) / scale);
+            }
+            else
+            {
+                shiftX = (int)(-hbar.Value / scale);
+            }
+
+            if (y > picY)
+            {
+                shiftY = (int)(((y - picY) / 2) / scale);
+            }
+            else
+            {
+                shiftY = (int)(-vbar.Value / scale);
+            }
         }
     }
 }

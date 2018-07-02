@@ -54,13 +54,14 @@
             // comboBox
             // 
             this.comboBox.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "4",
-            "8",
-            "16",
-            "32",
-            "64"});
+            "0",
+            "50",
+            "100",
+            "150",
+            "250",
+            "500",
+            "750",
+            "1000"});
             this.comboBox.Location = new System.Drawing.Point(205, 21);
             this.comboBox.Name = "comboBox";
             this.comboBox.Size = new System.Drawing.Size(86, 24);
@@ -69,13 +70,13 @@
             // 
             // trackBar
             // 
-            this.trackBar.LargeChange = 4;
+            this.trackBar.LargeChange = 25;
             this.trackBar.Location = new System.Drawing.Point(15, 71);
-            this.trackBar.Maximum = 64;
-            this.trackBar.Minimum = 1;
+            this.trackBar.Maximum = 1000;
             this.trackBar.Name = "trackBar";
             this.trackBar.Size = new System.Drawing.Size(381, 56);
             this.trackBar.TabIndex = 2;
+            this.trackBar.TickFrequency = 25;
             this.trackBar.Value = 1;
             this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
@@ -126,25 +127,25 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(16, 17);
             this.label2.TabIndex = 7;
-            this.label2.Text = "1";
+            this.label2.Text = "0";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(371, 108);
+            this.label3.Location = new System.Drawing.Point(357, 108);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(24, 17);
+            this.label3.Size = new System.Drawing.Size(40, 17);
             this.label3.TabIndex = 8;
-            this.label3.Text = "64";
+            this.label3.Text = "1000";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(191, 108);
+            this.label4.Location = new System.Drawing.Point(185, 108);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(24, 17);
+            this.label4.Size = new System.Drawing.Size(32, 17);
             this.label4.TabIndex = 9;
-            this.label4.Text = "32";
+            this.label4.Text = "500";
             // 
             // FormZoom
             // 

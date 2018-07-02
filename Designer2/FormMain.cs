@@ -622,6 +622,17 @@ namespace Designer2
         }
 
         //---
+        private void cMenuHotPoint_Click(object sender, EventArgs e)
+        {
+            colorDialog1.Color = ICOpanel.hotPoint;
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                setting.hotColor = colorDialog1.Color;
+                ICOpanel.hotPoint = setting.hotColor;
+            }
+        }
+
+        //---
         private void MenuAutoLoad_Click(object sender, EventArgs e)
         {
             setting.autoLoad = !setting.autoLoad;
@@ -768,10 +779,10 @@ namespace Designer2
         }
 
         //---
-        private void bgColorChange()
-        {
-            ICOpanel.backGround = setting.bgColor;
-        }
+        /* private void bgColorChange()
+         {
+             ICOpanel.backGround = setting.bgColor;
+         }*/
 
         //---
         private void autoLoadUpDate()
@@ -1273,11 +1284,12 @@ namespace Designer2
 
         private void toolZoom_Click(object sender, EventArgs e)
         {
-            FormZoom f = new FormZoom((int)ICOpanel.pixSize);
+            int step = 80;
+            FormZoom f = new FormZoom((int)((ICOpanel.pixSize - 1) * step));
             int z = 1;
             if (f.ShowDialog() == DialogResult.OK)
             {
-                ICOpanel.pixSize = f.zoomValue;
+                ICOpanel.pixSize = (float)f.zoomValue / step + 1;
             }
         }
     }
