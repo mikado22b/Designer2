@@ -79,7 +79,10 @@ namespace Designer2
             MenuSkin.SelectedIndex = (int)color.Skin;
 
             this.Controls.AddRange(ICOpanel.loadItem(MenuCS).ToArray());
+            cMenuWheel.Items.AddRange(Enum.GetNames(typeof(wVelocity)));
 
+            ICOpanel.OnPixSizeChange += new ICOdraw.pixHandler(pixSize);
+            ICOpanel.onMouseMove += new ICOdraw.mouseMoveHandler(mouseMove);
             setting = new Setting(@"Setting.txt");
 
             if (setting.read() == false)
@@ -97,11 +100,14 @@ namespace Designer2
             ICOpanel.selected = setting.selColor;
             ICOpanel.selectedPoint = setting.selpColor;
             ICOpanel.hotPoint = setting.hotColor;
+            ICOpanel.wheelVelocity = (wVelocity)setting.wheel;
+            cMenuWheel.SelectedIndex = (int)ICOpanel.wheelVelocity;
             recentFileUpdate();
             autoLoadUpDate();
             windowSaveUpdate();
             dataChange(sender, e);
             loadICOtoTab(-1);
+            pixSize();
         }
 
         //---
@@ -111,6 +117,7 @@ namespace Designer2
             setting.selColor = ICOpanel.selected;
             setting.selpColor = ICOpanel.selectedPoint;
             setting.hotColor = ICOpanel.hotPoint;
+            setting.wheel = (int)ICOpanel.wheelVelocity;
             setting.autoLoad = MenuAutoLoad.Checked;
             setting.windowSize = this.Size;
             setting.windowLocation = this.Location;
@@ -1284,13 +1291,49 @@ namespace Designer2
 
         private void toolZoom_Click(object sender, EventArgs e)
         {
-            int step = 80;
+            int step = ICOdraw.step;
             FormZoom f = new FormZoom((int)((ICOpanel.pixSize - 1) * step));
-            int z = 1;
+
             if (f.ShowDialog() == DialogResult.OK)
             {
-                ICOpanel.pixSize = (float)f.zoomValue / step + 1;
+                ICOpanel.zoom(0, 0, (float)f.zoomValue / step + 1);
+                //ICOpanel.pixSize = (float)f.zoomValue / step + 1;
             }
+        }
+
+        //---
+        private void FormMain_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Maximized)
+            {
+                forceDraw_Click(sender, e);
+            }
+        }
+
+        //---
+        private void cMenuWheel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ICOpanel.wheelVelocity = (wVelocity)cMenuWheel.SelectedIndex;
+        }
+
+        //---
+        private void pixSize()
+        {
+            labelPixSize.Text = "Pixel size " + ICOpanel.pixSize.ToString();
+        }
+
+        //---
+        private void mouseMove(int x, int y)
+        {
+            string sx = x.ToString();
+            string sy = y.ToString();
+            if (x == -1000 || y == -1000)
+            {
+                sx = "Out";
+                sy = "Out";
+            }
+
+            labelXY.Text = "X=" + sx + " | Y=" + sy;
         }
     }
 }

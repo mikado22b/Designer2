@@ -23,9 +23,10 @@ namespace Designer2
         protected Size w_size = new Size();
         protected Point w_point = new Point();
         protected bool w_s = false;
+        protected int whl;
 
         protected const char sep = '*';
-        protected string[] tags = { "[BGCL]", "[SEL]", "[SELP]", "[HOTP]", "[LF]", "[AL]", "[WINDOW]", };
+        protected string[] tags = { "[BGCL]", "[SEL]", "[SELP]", "[HOTP]", "[LF]", "[AL]", "[WINDOW]", "[WHL]" };
 
         //---
         public Setting(string fs)
@@ -77,9 +78,7 @@ namespace Designer2
             settings += tags[indx] + "\r\n";
             indx++;
             //save auto load last project
-            settings += tags[indx] + al.ToString();
-
-            settings += tags[indx] + "\r\n";
+            settings += tags[indx] + al.ToString() + tags[indx] + "\r\n";
             indx++;
             //save remember last window size
             settings += tags[indx] + "\r\n" + w_s.ToString() + sep + "\r\n" +
@@ -89,7 +88,9 @@ namespace Designer2
                 w_point.Y.ToString() + sep + "\r\n" +
                 tags[indx] + "\r\n";
             indx++;
-            //save skin
+            //save mouse wheel velocity
+            settings += tags[indx] + "\r\n" + whl.ToString() + "\r\n" + tags[indx] + "\r\n";
+            indx++;
 
             File.WriteAllText(fileSet, settings, Encoding.Default);
         }
@@ -236,7 +237,29 @@ namespace Designer2
                 }
                 readWindowSize(temp);
             }
-
+            //read mouse whl velocity
+            indx++;
+            s = settings.IndexOf(tags[indx].ToString());
+            e = settings.LastIndexOf(tags[indx].ToString());
+            if (s < 0 || e < 0)
+            {
+                f = false;
+                whl = 1;
+            }
+            else
+            {
+                s += tags[indx].ToString().Count();
+                string t = settings.Substring(s, e - s);
+                int result = 0;
+                f = int.TryParse(t, out result);
+                if (f)
+                {
+                    if (result < 0) result = 0;
+                    if (result > 2) result = 2;
+                    whl = result;
+                }
+                else whl = 1;
+            }
             return f;
         }
 
@@ -345,6 +368,21 @@ namespace Designer2
             get
             {
                 return w_s;
+            }
+        }
+
+        //---
+        public int wheel
+        {
+            set
+            {
+                if (value < 0) value = 0;
+                if (value > 2) value = 2;
+                whl = value;
+            }
+            get
+            {
+                return whl;
             }
         }
 

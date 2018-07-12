@@ -34,7 +34,25 @@ namespace Designer2
         {
             InitializeComponent();
             trackBar.Value = z;
-            comboBox.Text = z.ToString();
+            label1.Text = "Pixel size " + intTofloat(z);
+            label3.Text = ((int)(1000 / ICOdraw.step + 1)).ToString();
+        }
+
+        //---
+        protected string intTofloat(int i)
+        {
+            if (i < 0) i = 0;
+            if (i > 1000) i = 1000;
+            return ((float)i / ICOdraw.step + 1).ToString();
+        }
+
+        //---
+        protected int floatToInt(float f)
+        {
+            f -= 1;
+            if (f < 0) f = 0;
+            if (f > 1000 / ICOdraw.step) f = 1000 / ICOdraw.step;
+            return (int)(f * ICOdraw.step);
         }
 
         //---
@@ -52,15 +70,7 @@ namespace Designer2
         //---
         private void trackBar_ValueChanged(object sender, EventArgs e)
         {
-            comboBox.Text = trackBar.Value.ToString();
-        }
-
-        //---
-        private void comboBox_TextUpdate(object sender, EventArgs e)
-        {
-            int value;
-            if (int.TryParse(comboBox.Text, out value))
-                trackBar.Value = value;
+            label1.Text = "Pixel size " + intTofloat(trackBar.Value);
         }
 
         //---

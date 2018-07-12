@@ -77,6 +77,9 @@ namespace Designer2
     [Flags]
     public enum eKey { kNone = 0, kLeft = 1, kUp = 2, kRight = 4, kDown = 8, kCenter = 16 }
 
+    //---B
+    public enum wVelocity { Slow, Medium, Fast }
+
     #endregion Enum
 
     //---R
@@ -354,10 +357,13 @@ namespace Designer2
     //---Y
     public class ICOdraw
     {
-        protected float scale = 1;
-        protected int offsetX = 0;
-        protected int offsetY = 0;
-
+        public const int step = 50;
+        protected int[] vTab = { 1, 6, 36 };
+        protected float pSize = 1;
+        protected float offsetX = 0;
+        protected float offsetY = 0;
+        protected bool nodraw = false;
+        protected int velocity;
         protected Color bGround;
         protected Color sel;
         protected Color selPoint;
@@ -370,6 +376,14 @@ namespace Designer2
         protected VScrollBar vbar;
 
         protected Basis fu;
+
+        public delegate void pixHandler();
+
+        public delegate void mouseMoveHandler(int x, int y);
+
+        public event pixHandler OnPixSizeChange;
+
+        public event mouseMoveHandler onMouseMove;
 
         //---
         public ICOdraw()
@@ -384,6 +398,7 @@ namespace Designer2
             selPoint = Color.Yellow;
             hPoint = Color.Red;
             fu = new Basis();
+            wheelVelocity = wVelocity.Medium;
         }
 
         //---
@@ -421,7 +436,11 @@ namespace Designer2
             canvas.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom;
             canvas.BackColor = SystemColors.ControlLight;
             canvas.ContextMenuStrip = cm;
-            canvas.SizeChanged += new EventHandler(setBars);
+            canvas.SizeChanged += new EventHandler(panelChangeSize);
+            //canvas.Invalidated += new InvalidateEventHandler(setBars);
+            canvas.MouseWheel += new MouseEventHandler(wheel);
+            canvas.MouseMove += new MouseEventHandler(MouseMove);
+            canvas.MouseLeave += new EventHandler(mouseLeave);
 
             tab.Add(canvas);
 
@@ -432,8 +451,8 @@ namespace Designer2
             hbar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
             hbar.BackColor = SystemColors.ControlLight;
             hbar.Maximum = Basis.dim;
-            hbar.Scroll += new ScrollEventHandler(scr);
-            hbar.SizeChanged += new EventHandler(setBars);
+            hbar.Scroll += new ScrollEventHandler(scrollCanvasH);
+            //hbar.SizeChanged += new EventHandler(setBars);
             tab.Add(hbar);
 
             vbar.Left = left + strip + canvas.Width;
@@ -443,13 +462,29 @@ namespace Designer2
             vbar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             vbar.BackColor = SystemColors.ControlLight;
             vbar.Maximum = Basis.dim;
-            vbar.Scroll += new ScrollEventHandler(scr);
-            vbar.SizeChanged += new EventHandler(setBars);
+            vbar.Scroll += new ScrollEventHandler(scrollCanvasV);
+            //vbar.SizeChanged += new EventHandler(setBars);
             tab.Add(vbar);
 
-            setBars(this, new EventArgs());
-            scr(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+            panelChangeSize(this, new EventArgs());
+            //scrollCanvas(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
             return tab;
+        }
+
+        //---
+        public wVelocity wheelVelocity
+        {
+            set
+            {
+                velocity = vTab[(int)value];
+            }
+            get
+            {
+                if (velocity == vTab[(int)wVelocity.Fast]) return wVelocity.Fast;
+                if (velocity == vTab[(int)wVelocity.Medium]) return wVelocity.Medium;
+                velocity = vTab[(int)wVelocity.Slow];
+                return wVelocity.Slow;
+            }
         }
 
         //---
@@ -457,28 +492,30 @@ namespace Designer2
         {
             set
             {
-                bool fl = false;
-                if (scale != value) fl = true;
-                scale = value;
-                if (fl) forceDraw();
-                setBars(scale, new EventArgs());
-                scr(scale, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+                if (pSize != value)
+                {
+                    pSize = value;
+                    hbar.Maximum = (int)(Basis.dim * pSize);
+                    vbar.Maximum = (int)(Basis.dim * pSize);
+                    OnPixSizeChange.Invoke();
+                }
             }
             get
             {
-                return scale;
+                return pSize;
             }
         }
 
         //---
-        public int shiftX
+        public float shiftX
         {
             set
             {
-                bool fl = false;
-                if (offsetX != value) fl = true;
-                offsetX = value;
-                if (fl) forceDraw();
+                if (offsetX != value)
+                {
+                    offsetX = value;
+                    forceDraw();
+                }
             }
             get
             {
@@ -487,16 +524,20 @@ namespace Designer2
         }
 
         //---
-        public int shiftY
+        public float shiftY
         {
             set
             {
-                bool fl = false;
-                if (offsetY != value) fl = true;
-                offsetY = value;
-                if (fl) forceDraw();
+                if (offsetY != value)
+                {
+                    offsetY = value;
+                    forceDraw();
+                }
             }
-            get { return offsetY; }
+            get
+            {
+                return offsetY;
+            }
         }
 
         //---
@@ -566,6 +607,7 @@ namespace Designer2
         //---
         protected void forceDraw()
         {
+            if (nodraw) return;
             draw(fu, true);
         }
 
@@ -573,7 +615,7 @@ namespace Designer2
         public void draw(Basis b, bool allDraw = false)
         {
             Graphics gfx = canvas.CreateGraphics();
-            gfx.ScaleTransform(scale, scale);
+            gfx.ScaleTransform(pSize, pSize);
             gfx.TranslateTransform(offsetX, offsetY);
 
             gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
@@ -617,48 +659,153 @@ namespace Designer2
         }
 
         //---
-        private void setBars(object obj, EventArgs e)
+        private void panelChangeSize(object obj, EventArgs e)
         {
+            nodraw = true;
             int x = canvas.Width;
             int y = canvas.Height;
-            int picX = (int)(Basis.dim * scale);
-            int picY = (int)(Basis.dim * scale);
-            hbar.Maximum = picX;
-            vbar.Maximum = picY;
-
+            int picX = (int)(Basis.dim * pSize);
+            int picY = (int)(Basis.dim * pSize);
             hbar.LargeChange = x;
-
             vbar.LargeChange = y;
-            scr(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+            if (x > picX) scrollCanvasH(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+            if (y > picY) scrollCanvasV(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
 
+            nodraw = false;
             forceDraw();
         }
 
         //---
-        private void scr(object obj, ScrollEventArgs e)
+        private void scrollCanvasH(object obj, ScrollEventArgs e)
         {
             int x = canvas.Width;
+
+            int picX = (int)(Basis.dim * pSize);
+
+            if (x >= picX)
+            {
+                shiftX = ((x - picX) / 2) / pSize;
+            }
+            else
+            {
+                shiftX = -hbar.Value / pSize;
+            }
+        }
+
+        //---
+        private void scrollCanvasV(object obj, ScrollEventArgs e)
+        {
             int y = canvas.Height;
-            int picX = (int)(Basis.dim * scale);
-            int picY = (int)(Basis.dim * scale);
-
-            if (x > picX)
+            int picY = (int)(Basis.dim * pSize);
+            if (y >= picY)
             {
-                shiftX = (int)(((x - picX) / 2) / scale);
+                shiftY = ((y - picY) / 2) / pSize;
             }
             else
             {
-                shiftX = (int)(-hbar.Value / scale);
+                shiftY = -vbar.Value / pSize;
             }
+        }
 
-            if (y > picY)
+        //---
+        protected void wheel(object obj, MouseEventArgs e)
+        {
+            float siz = (pixSize - 1) * step;
+
+            int w = SystemInformation.MouseWheelScrollDelta;
+            w /= velocity;
+            int d = e.Delta / w;
+
+            siz += d;
+            if (siz < 0) siz = 0;
+            if (siz > 1000) siz = 1000;
+
+            //pixSize = siz / step + 1;
+            zoom(e.X, e.Y, siz / step + 1);
+        }
+
+        //---
+        protected void MouseMove(object obj, MouseEventArgs e)
+        {
+            if (false)
             {
-                shiftY = (int)(((y - picY) / 2) / scale);
+                if (canvas.Tag == null)
+                {
+                    canvas.Tag = new Point(e.X, e.Y);
+                    return;
+                }
+
+                int dx = ((Point)canvas.Tag).X - e.X;
+                int dy = ((Point)canvas.Tag).Y - e.Y;
+                canvas.Tag = new Point(e.X, e.Y);
+                int xb = hbar.Value;
+                int yb = vbar.Value;
+                xb += dx;
+                yb += dy;
+                if (xb < 0) xb = 0;
+                if (yb < 0) yb = 0;
+                if (xb > hbar.Maximum - hbar.LargeChange) xb = hbar.Maximum - hbar.LargeChange;
+                if (yb > vbar.Maximum - vbar.LargeChange) yb = vbar.Maximum - vbar.LargeChange;
+                hbar.Value = xb;
+                vbar.Value = yb;
+                scrollCanvasH(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+                scrollCanvasV(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+                return;
             }
-            else
-            {
-                shiftY = (int)(-vbar.Value / scale);
-            }
+            canvas.Tag = null;
+            int x = e.X;
+            int y = e.Y;
+            x = (int)(x / pSize - 127 - offsetX);
+            y = (int)(y / pSize - 127 - offsetY);
+
+            if (x < -127 || x > 254) x = -1000;
+            if (y < -127 || y > 254) x = -1000;
+            onMouseMove.Invoke(x, y);
+        }
+
+        //---
+        protected void mouseLeave(object obj, EventArgs e)
+        {
+            onMouseMove.Invoke(-1000, -1000);
+        }
+
+        //---
+        public void zoom(int x, int y, float z)
+        {
+            nodraw = true;
+
+            double xbarpr = (double)x / canvas.Width;
+            double xpicpr = (hbar.Value + hbar.LargeChange * xbarpr) / hbar.Maximum;
+
+            double ybarpr = (double)y / canvas.Height;
+            double ypicpr = (vbar.Value + vbar.LargeChange * ybarpr) / vbar.Maximum;
+
+            pixSize = z;
+            hbar.Maximum = (int)(Basis.dim * pSize);
+            vbar.Maximum = (int)(Basis.dim * pSize);
+
+            int hPosition = (int)(Math.Round(hbar.Maximum * xpicpr - hbar.LargeChange * xbarpr, 0));
+            int vPosition = (int)(Math.Round(vbar.Maximum * ypicpr - vbar.LargeChange * ybarpr, 0));
+
+            if (hPosition > hbar.Maximum - hbar.LargeChange) hPosition = hbar.Maximum - hbar.LargeChange;
+            if (hPosition < 0) hPosition = 0;
+
+            if (vPosition > vbar.Maximum - vbar.LargeChange) vPosition = vbar.Maximum - vbar.LargeChange;
+            if (vPosition < 0) vPosition = 0;
+
+            hbar.Value = hPosition;
+            vbar.Value = vPosition;
+            scrollCanvasH(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+            scrollCanvasV(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+
+            x = (int)(x / pSize - 127 - offsetX);
+            y = (int)(y / pSize - 127 - offsetY);
+
+            if (x < -127 || x > 254) x = -1000;
+            if (y < -127 || y > 254) x = -1000;
+            onMouseMove.Invoke(x, y);
+            nodraw = false;
+            forceDraw();
         }
     }
 }

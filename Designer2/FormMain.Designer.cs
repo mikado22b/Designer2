@@ -33,6 +33,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.SelectedIcoLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.selectedItemLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.labelPixSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolNew = new System.Windows.Forms.ToolStripButton();
             this.toolLoad = new System.Windows.Forms.ToolStripButton();
@@ -93,7 +94,7 @@
             this.MenuItemsProperty = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuCanvas = new System.Windows.Forms.ToolStripMenuItem();
-            this.originPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cMenuWheel = new System.Windows.Forms.ToolStripComboBox();
             this.cMenuPixelSize = new System.Windows.Forms.ToolStripMenuItem();
             this.colorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuBackgroundColor = new System.Windows.Forms.ToolStripMenuItem();
@@ -156,6 +157,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.labelXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -184,7 +186,9 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SelectedIcoLabel,
-            this.selectedItemLabel});
+            this.selectedItemLabel,
+            this.labelPixSize,
+            this.labelXY});
             this.statusStrip.Location = new System.Drawing.Point(0, 449);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(568, 29);
@@ -204,6 +208,13 @@
             this.selectedItemLabel.Name = "selectedItemLabel";
             this.selectedItemLabel.Size = new System.Drawing.Size(22, 24);
             this.selectedItemLabel.Text = "...";
+            // 
+            // labelPixSize
+            // 
+            this.labelPixSize.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.labelPixSize.Name = "labelPixSize";
+            this.labelPixSize.Size = new System.Drawing.Size(22, 24);
+            this.labelPixSize.Text = "...";
             // 
             // toolStrip
             // 
@@ -734,7 +745,7 @@
             // MenuCanvas
             // 
             this.MenuCanvas.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.originPointToolStripMenuItem,
+            this.cMenuWheel,
             this.cMenuPixelSize,
             this.colorsToolStripMenuItem});
             this.MenuCanvas.Image = global::Designer2.Properties.Resources.Size;
@@ -742,16 +753,21 @@
             this.MenuCanvas.Size = new System.Drawing.Size(247, 26);
             this.MenuCanvas.Text = "&Canvas...";
             // 
-            // originPointToolStripMenuItem
+            // cMenuWheel
             // 
-            this.originPointToolStripMenuItem.Name = "originPointToolStripMenuItem";
-            this.originPointToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
-            this.originPointToolStripMenuItem.Text = "Origin point...";
+            this.cMenuWheel.AutoCompleteCustomSource.AddRange(new string[] {
+            "Wheel slow",
+            "Wheel midium",
+            "Wheel fast"});
+            this.cMenuWheel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cMenuWheel.Name = "cMenuWheel";
+            this.cMenuWheel.Size = new System.Drawing.Size(181, 28);
+            this.cMenuWheel.SelectedIndexChanged += new System.EventHandler(this.cMenuWheel_SelectedIndexChanged);
             // 
             // cMenuPixelSize
             // 
             this.cMenuPixelSize.Name = "cMenuPixelSize";
-            this.cMenuPixelSize.Size = new System.Drawing.Size(173, 26);
+            this.cMenuPixelSize.Size = new System.Drawing.Size(247, 26);
             this.cMenuPixelSize.Text = "Pixel size ...";
             this.cMenuPixelSize.Click += new System.EventHandler(this.toolZoom_Click);
             // 
@@ -764,7 +780,7 @@
             this.cMenuHotPoint});
             this.colorsToolStripMenuItem.Image = global::Designer2.Properties.Resources.Color;
             this.colorsToolStripMenuItem.Name = "colorsToolStripMenuItem";
-            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.colorsToolStripMenuItem.Size = new System.Drawing.Size(247, 26);
             this.colorsToolStripMenuItem.Text = "Colors...";
             // 
             // MenuBackgroundColor
@@ -1351,6 +1367,12 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // labelXY
+            // 
+            this.labelXY.Name = "labelXY";
+            this.labelXY.Size = new System.Drawing.Size(18, 24);
+            this.labelXY.Text = "...";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1362,6 +1384,7 @@
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
             this.MinimumSize = new System.Drawing.Size(543, 524);
@@ -1371,6 +1394,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.Shown += new System.EventHandler(this.FormMain_Shown);
+            this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);
@@ -1515,8 +1539,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ContextMenuStrip MenuCS;
         private System.Windows.Forms.ToolStripMenuItem Draw;
-        //private System.Windows.Forms.ToolStripMenuItem menuPixelSize;
-        private System.Windows.Forms.ToolStripMenuItem originPointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem forceDraw;
         private System.Windows.Forms.ToolStripMenuItem toolZoom;
         private System.Windows.Forms.ToolStripMenuItem colorsToolStripMenuItem;
@@ -1530,6 +1552,9 @@
         private System.Windows.Forms.ToolStripMenuItem selectedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem specialPointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hotPointToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox cMenuWheel;
+        private System.Windows.Forms.ToolStripStatusLabel labelPixSize;
+        private System.Windows.Forms.ToolStripStatusLabel labelXY;
     }
 }
 
