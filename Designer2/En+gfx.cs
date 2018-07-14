@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace Designer2
 {
@@ -255,7 +251,7 @@ namespace Designer2
     public class Basis
     {
         protected Pix[,] pixels;
-        public const int dim = 383;
+        public const int dim = 382;
 
         //---
         public Basis()
@@ -358,12 +354,16 @@ namespace Designer2
     public class ICOdraw
     {
         public const int step = 50;
-        protected int[] vTab = { 1, 6, 36 };
+        protected int[] vTab = { 2, 6, 18 };
         protected float pSize = 1;
         protected float offsetX = 0;
         protected float offsetY = 0;
         protected bool nodraw = false;
         protected int velocity;
+        protected int hbarOld;
+        protected int vbarOld;
+        protected Point mouse;
+        protected bool midPress = false;
         protected Color bGround;
         protected Color sel;
         protected Color selPoint;
@@ -727,34 +727,46 @@ namespace Designer2
         //---
         protected void MouseMove(object obj, MouseEventArgs e)
         {
-            if (false)
-            {
-                if (canvas.Tag == null)
-                {
-                    canvas.Tag = new Point(e.X, e.Y);
-                    return;
-                }
+            if (((e.Button & MouseButtons.Middle) > 0) || (Control.ModifierKeys == Keys.Control))
 
-                int dx = ((Point)canvas.Tag).X - e.X;
-                int dy = ((Point)canvas.Tag).Y - e.Y;
-                canvas.Tag = new Point(e.X, e.Y);
-                int xb = hbar.Value;
-                int yb = vbar.Value;
-                xb += dx;
-                yb += dy;
-                if (xb < 0) xb = 0;
-                if (yb < 0) yb = 0;
-                if (xb > hbar.Maximum - hbar.LargeChange) xb = hbar.Maximum - hbar.LargeChange;
-                if (yb > vbar.Maximum - vbar.LargeChange) yb = vbar.Maximum - vbar.LargeChange;
-                hbar.Value = xb;
-                vbar.Value = yb;
-                scrollCanvasH(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
-                scrollCanvasV(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
-                return;
+            {
+                if (midPress == false)
+                {
+                    midPress = true;
+                    mouse = new Point(e.X, e.Y);
+                    hbarOld = hbar.Value;
+                    vbarOld = vbar.Value;
+                }
+                else
+                {
+                    int dx = mouse.X - e.X;
+                    int dy = mouse.Y - e.Y;
+
+                    int xb = hbarOld + dx;
+                    int yb = vbarOld + dy;
+
+                    if (xb > hbar.Maximum - hbar.LargeChange + 1) xb = hbar.Maximum - hbar.LargeChange + 1;
+                    if (yb > vbar.Maximum - vbar.LargeChange + 1) yb = vbar.Maximum - vbar.LargeChange + 1;
+                    if (xb < 0) xb = 0;
+                    if (yb < 0) yb = 0;
+
+                    hbar.Value = xb;
+                    vbar.Value = yb;
+                    scrollCanvasH(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+                    scrollCanvasV(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+                }
             }
-            canvas.Tag = null;
-            int x = e.X;
-            int y = e.Y;
+            else
+            {
+                midPress = false;
+            }
+
+            computeXY(e.X, e.Y);
+        }
+
+        //---
+        protected void computeXY(int x, int y)
+        {
             x = (int)(x / pSize - 127 - offsetX);
             y = (int)(y / pSize - 127 - offsetY);
 
@@ -781,16 +793,14 @@ namespace Designer2
             double ypicpr = (vbar.Value + vbar.LargeChange * ybarpr) / vbar.Maximum;
 
             pixSize = z;
-            hbar.Maximum = (int)(Basis.dim * pSize);
-            vbar.Maximum = (int)(Basis.dim * pSize);
 
             int hPosition = (int)(Math.Round(hbar.Maximum * xpicpr - hbar.LargeChange * xbarpr, 0));
             int vPosition = (int)(Math.Round(vbar.Maximum * ypicpr - vbar.LargeChange * ybarpr, 0));
 
-            if (hPosition > hbar.Maximum - hbar.LargeChange) hPosition = hbar.Maximum - hbar.LargeChange;
+            if (hPosition > hbar.Maximum - hbar.LargeChange + 1) hPosition = hbar.Maximum - hbar.LargeChange + 1;
             if (hPosition < 0) hPosition = 0;
 
-            if (vPosition > vbar.Maximum - vbar.LargeChange) vPosition = vbar.Maximum - vbar.LargeChange;
+            if (vPosition > vbar.Maximum - vbar.LargeChange + 1) vPosition = vbar.Maximum - vbar.LargeChange + 1;
             if (vPosition < 0) vPosition = 0;
 
             hbar.Value = hPosition;
@@ -798,12 +808,7 @@ namespace Designer2
             scrollCanvasH(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
             scrollCanvasV(this, new ScrollEventArgs(ScrollEventType.EndScroll, 0));
 
-            x = (int)(x / pSize - 127 - offsetX);
-            y = (int)(y / pSize - 127 - offsetY);
-
-            if (x < -127 || x > 254) x = -1000;
-            if (y < -127 || y > 254) x = -1000;
-            onMouseMove.Invoke(x, y);
+            computeXY(x, y);
             nodraw = false;
             forceDraw();
         }
